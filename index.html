@@ -1,0 +1,2378 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juanito Laguna & El Mundo | Experiencia Pop-Art Interactiva</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Space Grotesk, Outfit & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Outfit', 'Space Grotesk', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #FFFDF7;
+            --bg-grad-1: #E0F2FE;
+            --bg-grad-2: #FEF9C3;
+            --bg-grad-3: #FCE7F3;
+            --ink-color: #1E293B;
+            --accent-primary: #0284C7;
+            --accent-secondary: #FACC15;
+            --accent-coral: #F43F5E;
+            --accent-mint: #10B981;
+            --accent-violet: #8B5CF6;
+            --card-bg: #FFFFFF;
+        }
+
+        /* Tema 2: Pop Neón */
+        body.theme-neon {
+            --bg-main: #F8FAFC;
+            --bg-grad-1: #CCFBF1;
+            --bg-grad-2: #F3E8FF;
+            --bg-grad-3: #FCE7F3;
+            --ink-color: #0F172A;
+            --accent-primary: #4F46E5;
+            --accent-secondary: #84CC16;
+            --accent-coral: #EC4899;
+            --accent-mint: #06B6D4;
+            --accent-violet: #9333EA;
+            --card-bg: #FFFFFF;
+        }
+
+        /* Tema 3: Atardecer Collage */
+        body.theme-sunset {
+            --bg-main: #FFFBEB;
+            --bg-grad-1: #FFEDD5;
+            --bg-grad-2: #FEE2E2;
+            --bg-grad-3: #FEF3C7;
+            --ink-color: #292524;
+            --accent-primary: #EA580C;
+            --accent-secondary: #EAB308;
+            --accent-coral: #E11D48;
+            --accent-mint: #0D9488;
+            --accent-violet: #7C3AED;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(at 10% 10%, var(--bg-grad-1) 0px, transparent 50%),
+                radial-gradient(at 90% 15%, var(--bg-grad-2) 0px, transparent 50%),
+                radial-gradient(at 50% 85%, var(--bg-grad-3) 0px, transparent 55%);
+            background-attachment: fixed;
+            color: var(--ink-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background 0.5s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Neo-Brutalismo Suave */
+        .neo-card {
+            background-color: var(--card-bg);
+            border: 2.5px solid var(--ink-color);
+            box-shadow: 5px 5px 0px var(--ink-color);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+        }
+
+        .neo-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0px var(--ink-color);
+        }
+
+        .neo-card-sky { box-shadow: 6px 6px 0px var(--accent-primary); }
+        .neo-card-sky:hover { box-shadow: 9px 9px 0px var(--accent-primary); }
+
+        .neo-card-sun { box-shadow: 6px 6px 0px var(--accent-secondary); }
+        .neo-card-sun:hover { box-shadow: 9px 9px 0px var(--accent-secondary); }
+
+        .neo-card-coral { box-shadow: 6px 6px 0px var(--accent-coral); }
+        .neo-card-coral:hover { box-shadow: 9px 9px 0px var(--accent-coral); }
+
+        .neo-card-mint { box-shadow: 6px 6px 0px var(--accent-mint); }
+        .neo-card-mint:hover { box-shadow: 9px 9px 0px var(--accent-mint); }
+
+        .neo-card-violet { box-shadow: 6px 6px 0px var(--accent-violet); }
+        .neo-card-violet:hover { box-shadow: 9px 9px 0px var(--accent-violet); }
+
+        .neo-btn {
+            border: 2.5px solid var(--ink-color);
+            box-shadow: 3px 3px 0px var(--ink-color);
+            transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .neo-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--ink-color);
+        }
+
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--ink-color);
+        }
+
+        /* Animaciones flotantes y pirueta del barrilete */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: floatSlow 4.5s ease-in-out infinite;
+        }
+
+        @keyframes kiteBarrelRoll {
+            0% { transform: scale(1) rotate(0deg); }
+            40% { transform: scale(1.25) rotate(180deg); }
+            80% { transform: scale(1.15) rotate(340deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        .kite-spin {
+            animation: kiteBarrelRoll 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Equalizador de sonido animado */
+        @keyframes eqBar {
+            0%, 100% { height: 4px; }
+            50% { height: 14px; }
+        }
+        .eq-active span:nth-child(1) { animation: eqBar 0.6s infinite ease-in-out; }
+        .eq-active span:nth-child(2) { animation: eqBar 0.45s infinite ease-in-out 0.15s; }
+        .eq-active span:nth-child(3) { animation: eqBar 0.7s infinite ease-in-out 0.3s; }
+
+        /* Modo Edición Inline Visual */
+        body.edit-active [data-editable] {
+            outline: 2px dashed var(--accent-violet);
+            outline-offset: 4px;
+            border-radius: 8px;
+            background-color: rgba(139, 92, 246, 0.06);
+            cursor: text;
+        }
+        body.edit-active [data-editable]:focus {
+            outline: 2.5px solid var(--accent-coral);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Modo Presentación (oculta controles de edición) */
+        body.presentation-mode .editor-ui {
+            display: none !important;
+        }
+
+        /* Estilos optimizados para Exportar PDF / Imprimir */
+        @media print {
+            @page {
+                margin: 1.2cm;
+                size: A4 portrait;
+            }
+            body {
+                background: #FFFFFF !important;
+                color: #0F172A !important;
+                font-size: 11pt;
+            }
+            .no-print, .editor-ui, #studio-drawer, #toast-container, #trivia-section, #presentation-exit-pill {
+                display: none !important;
+            }
+            .print-show-all {
+                display: block !important;
+            }
+            .neo-card {
+                box-shadow: none !important;
+                border: 2px solid #1E293B !important;
+                break-inside: avoid;
+                margin-bottom: 14px;
+            }
+            section {
+                break-inside: avoid;
+                margin-bottom: 24px !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-yellow-300 selection:text-slate-900">
+
+    <!-- Notificación Flotante (Toast) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+    <!-- Píldora flotante para salir del Modo Presentación -->
+    <button id="presentation-exit-pill" onclick="togglePresentationMode(false)" class="hidden fixed bottom-5 left-5 z-50 neo-btn bg-amber-300 text-slate-900 px-4 py-2.5 rounded-full font-bold text-xs flex items-center gap-2 no-print">
+        <i class="fa-solid fa-eye"></i>
+        <span>Salir de Modo Presentación</span>
+    </button>
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b-2 border-slate-900 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Marca & Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-400 via-yellow-300 to-rose-400 border-2 border-slate-900 shadow-[3px_3px_0px_#1E293B] flex items-center justify-center animate-float">
+                    <!-- Mini Barrilete SVG -->
+                    <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none">
+                        <polygon points="16,2 28,14 16,26 4,14" fill="#FACC15" stroke="#1E293B" stroke-width="2.2"/>
+                        <polygon points="16,2 28,14 16,14" fill="#F43F5E"/>
+                        <polygon points="16,14 4,14 16,26" fill="#0284C7"/>
+                        <path d="M16 26 Q 12 29 18 31" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-yellow-300 border border-slate-900 text-slate-900">Arte & Sociedad</span>
+                    <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 leading-tight">Juanito & El Mundo</h1>
+                </div>
+            </div>
+
+            <!-- Selector de 3 Paletas de Colores -->
+            <div class="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl border-2 border-slate-900">
+                <span class="text-xs font-bold px-2 hidden lg:inline text-slate-700"><i class="fa-solid fa-palette mr-1"></i>Tema:</span>
+                <button onclick="setTheme('default')" id="btn-theme-default" title="Cielo de Barrilete" class="px-2.5 py-1 rounded-xl text-xs font-bold bg-sky-300 border-2 border-slate-900 text-slate-900 transition flex items-center gap-1">
+                    <span>🪁</span><span class="hidden sm:inline">Cielo</span>
+                </button>
+                <button onclick="setTheme('neon')" id="btn-theme-neon" title="Pop Neón" class="px-2.5 py-1 rounded-xl text-xs font-bold hover:bg-fuchsia-200 text-slate-800 transition flex items-center gap-1">
+                    <span>⚡</span><span class="hidden sm:inline">Pop Neón</span>
+                </button>
+                <button onclick="setTheme('sunset')" id="btn-theme-sunset" title="Atardecer Collage" class="px-2.5 py-1 rounded-xl text-xs font-bold hover:bg-orange-200 text-slate-800 transition flex items-center gap-1">
+                    <span>🌅</span><span class="hidden sm:inline">Atardecer</span>
+                </button>
+            </div>
+
+            <!-- Controles de Audio, Edición, Presentación y PDF -->
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Botón Sonido FX -->
+                <button id="sound-toggle-btn" onclick="toggleSound()" class="neo-btn bg-emerald-300 text-slate-900 px-3 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2">
+                    <div id="sound-eq" class="flex items-end gap-0.5 h-3.5 eq-active">
+                        <span class="w-1 bg-slate-900 rounded-full h-3"></span>
+                        <span class="w-1 bg-slate-900 rounded-full h-2"></span>
+                        <span class="w-1 bg-slate-900 rounded-full h-3.5"></span>
+                    </div>
+                    <span id="sound-label">Sonido: ON</span>
+                </button>
+
+                <!-- Botón Música Lo-Fi Ambiental -->
+                <button id="ambient-toggle-btn" onclick="toggleAmbientMusic()" class="neo-btn bg-violet-200 text-slate-900 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5" title="Música ambiental relajante generada por código">
+                    <i id="ambient-icon" class="fa-solid fa-music"></i>
+                    <span class="hidden md:inline" id="ambient-label">Lo-Fi: OFF</span>
+                </button>
+
+                <!-- Botón Modo Estudio / Editar Todo -->
+                <button onclick="toggleStudioDrawer()" class="editor-ui neo-btn bg-yellow-300 text-slate-900 px-3.5 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Editar Todo</span>
+                </button>
+
+                <!-- Interruptor Modo Presentación -->
+                <button onclick="togglePresentationMode(true)" class="editor-ui neo-btn bg-white text-slate-900 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5" title="Oculta los controles de edición para exponer limpio">
+                    <i class="fa-solid fa-display text-sky-600"></i>
+                    <span class="hidden lg:inline">Presentación</span>
+                </button>
+
+                <!-- Botón Descargar PDF -->
+                <button onclick="exportPDF()" class="neo-btn bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Descargar PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full space-y-16">
+
+        <!-- =========================================================
+             1. HERO INTERACTIVO CON BARRILETE VOLADOR
+             ========================================================= -->
+        <section class="neo-card neo-card-sky rounded-3xl p-6 sm:p-10 relative overflow-hidden bg-gradient-to-br from-sky-100 via-white to-amber-50">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Texto del Hero -->
+                <div class="lg:col-span-6 space-y-5 z-10">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-yellow-300 border-2 border-slate-900 text-xs font-extrabold uppercase tracking-wide shadow-[2px_2px_0px_#1E293B]">
+                        <span>🎨</span> <span>Exploración Visual, Social y Artística</span>
+                    </div>
+
+                    <h2 id="hero-title" data-editable="hero-title" class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-[1.1]">
+                        La Pobreza en el Mundo, Argentina y los Sueños de Juanito Laguna
+                    </h2>
+
+                    <p id="hero-subtitle" data-editable="hero-subtitle" class="text-base sm:text-lg text-slate-700 font-medium leading-relaxed">
+                        Un viaje interactivo para comprender las cifras de la desigualdad global y local, y descubrir cómo Antonio Berni transformó los desechos en esperanza a través de un niño que remonta barriletes al cielo.
+                    </p>
+
+                    <!-- Botones de Acción Hero -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2 no-print">
+                        <button onclick="boostKite()" class="neo-btn bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 text-slate-900 px-5 py-3 rounded-2xl font-extrabold text-sm flex items-center gap-2">
+                            <span class="text-lg">🪁</span>
+                            <span>¡Impulsar Barrilete!</span>
+                        </button>
+                        <a href="#datos-section" onclick="soundEngine.playMarimba(523.25)" class="neo-btn bg-sky-500 text-white px-5 py-3 rounded-2xl font-bold text-sm flex items-center gap-2">
+                            <span>Explorar Datos</span>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                        <a href="#taller-section" onclick="soundEngine.playMarimba(659.25)" class="neo-btn bg-white text-slate-900 px-5 py-3 rounded-2xl font-bold text-sm flex items-center gap-2">
+                            <span>Crear Xilocollage</span>
+                            <span>✂️</span>
+                        </a>
+                    </div>
+
+                    <!-- Medidor de Altura del Sueño -->
+                    <div class="bg-white/90 border-2 border-slate-900 rounded-2xl p-3.5 flex items-center justify-between gap-4 max-w-md no-print">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-2xl">✨</span>
+                            <div>
+                                <div class="text-[11px] font-extrabold uppercase text-slate-500">Altura del Barrilete</div>
+                                <div id="kite-altitude-text" class="text-sm font-black text-sky-700">120 metros • ¡Mueve el cursor en el cielo!</div>
+                            </div>
+                        </div>
+                        <span id="kite-boost-count" class="px-2.5 py-1 rounded-xl bg-rose-100 border border-slate-900 text-xs font-extrabold text-rose-700">0 piruetas</span>
+                    </div>
+                </div>
+
+                <!-- Escena SVG Interactiva del Barrilete y Juanito -->
+                <div class="lg:col-span-6">
+                    <div id="kite-sky-container" onclick="boostKite(event)" class="relative w-full h-[340px] sm:h-[400px] rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_#1E293B] overflow-hidden cursor-pointer select-none bg-gradient-to-b from-sky-400 via-sky-200 to-amber-100">
+                        <svg id="kite-sky-svg" viewBox="0 0 600 420" class="w-full h-full block">
+                            <defs>
+                                <linearGradient id="sunGrad" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#FEF08A"/>
+                                    <stop offset="100%" stop-color="#F59E0B"/>
+                                </linearGradient>
+                                <pattern id="corrugatedTin" width="12" height="12" patternUnits="userSpaceOnUse">
+                                    <rect width="12" height="12" fill="#94A3B8"/>
+                                    <line x1="0" y1="0" x2="0" y2="12" stroke="#64748B" stroke-width="3"/>
+                                    <line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="2"/>
+                                </pattern>
+                                <pattern id="cardboardTex" width="16" height="16" patternUnits="userSpaceOnUse">
+                                    <rect width="16" height="16" fill="#D97706"/>
+                                    <path d="M0 8 H16 M8 0 V16" stroke="#B45309" stroke-width="1" opacity="0.4"/>
+                                </pattern>
+                            </defs>
+
+                            <!-- Sol Collage Brillante -->
+                            <g class="animate-float" transform="translate(85, 75)">
+                                <circle cx="0" cy="0" r="38" fill="url(#sunGrad)" stroke="#1E293B" stroke-width="3"/>
+                                <circle cx="0" cy="0" r="26" fill="none" stroke="#1E293B" stroke-width="1.5" stroke-dasharray="4 4"/>
+                                <!-- Rayos geométricos -->
+                                <polygon points="0,-54 6,-42 -6,-42" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                                <polygon points="0,54 6,42 -6,42" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                                <polygon points="-54,0 -42,6 -42,-6" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                                <polygon points="54,0 42,6 42,-6" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                            </g>
+
+                            <!-- Nubes Pop-Art -->
+                            <g transform="translate(220, 55)" opacity="0.95">
+                                <path d="M15 35 H85 A18 18 0 0 0 85 5 A22 22 0 0 0 45 2 A16 16 0 0 0 15 35 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.5"/>
+                            </g>
+                            <g transform="translate(450, 95)" opacity="0.9">
+                                <path d="M10 30 H75 A15 15 0 0 0 75 5 A18 18 0 0 0 40 2 A14 14 0 0 0 10 30 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.5"/>
+                            </g>
+
+                            <!-- Paisaje Periférico Collage (Casitas de chapa y cartón con colores vivos) -->
+                            <!-- Colina trasera verde menta -->
+                            <path d="M0 320 Q 180 260 360 310 T 600 290 V 420 H 0 Z" fill="#34D399" stroke="#1E293B" stroke-width="2.5"/>
+                            
+                            <!-- Casitas estilo Xilocollage -->
+                            <g transform="translate(380, 235)">
+                                <rect x="0" y="25" width="65" height="55" fill="url(#cardboardTex)" stroke="#1E293B" stroke-width="2.5"/>
+                                <polygon points="-6,25 32,0 71,25" fill="url(#corrugatedTin)" stroke="#1E293B" stroke-width="2.5"/>
+                                <rect x="14" y="42" width="16" height="18" fill="#FEF08A" stroke="#1E293B" stroke-width="2"/>
+                                <rect x="40" y="48" width="14" height="32" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                            </g>
+                            <g transform="translate(465, 250)">
+                                <rect x="0" y="20" width="55" height="45" fill="#38BDF8" stroke="#1E293B" stroke-width="2.5"/>
+                                <polygon points="-5,20 27,2 60,20" fill="#FACC15" stroke="#1E293B" stroke-width="2.5"/>
+                                <rect x="18" y="34" width="14" height="14" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+                            </g>
+
+                            <!-- Colina frontal amarilla y coral -->
+                            <path d="M0 345 Q 240 315 600 355 V 420 H 0 Z" fill="#FDE047" stroke="#1E293B" stroke-width="2.5"/>
+
+                            <!-- Flores recicladas y latitas artísticas en el pasto -->
+                            <g transform="translate(65, 365)">
+                                <line x1="0" y1="0" x2="0" y2="25" stroke="#1E293B" stroke-width="2.5"/>
+                                <circle cx="0" cy="0" r="8" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                                <circle cx="0" cy="0" r="3" fill="#FACC15"/>
+                            </g>
+                            <g transform="translate(275, 372)">
+                                <line x1="0" y1="0" x2="0" y2="22" stroke="#1E293B" stroke-width="2.5"/>
+                                <circle cx="0" cy="0" r="7" fill="#8B5CF6" stroke="#1E293B" stroke-width="2"/>
+                                <circle cx="0" cy="0" r="3" fill="#FFFFFF"/>
+                            </g>
+
+                            <!-- Personaje Ilustrado de Juanito Laguna -->
+                            <g id="juanito-character" transform="translate(155, 275)">
+                                <!-- Piernas -->
+                                <rect x="12" y="65" width="9" height="28" rx="4" fill="#FDBA74" stroke="#1E293B" stroke-width="2.2"/>
+                                <rect x="27" y="65" width="9" height="28" rx="4" fill="#FDBA74" stroke="#1E293B" stroke-width="2.2"/>
+                                <!-- Zapatillas -->
+                                <rect x="8" y="90" width="15" height="8" rx="4" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                                <rect x="25" y="90" width="15" height="8" rx="4" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                                <!-- Pantalón corto con parche collage -->
+                                <rect x="9" y="46" width="30" height="24" rx="5" fill="#0284C7" stroke="#1E293B" stroke-width="2.2"/>
+                                <rect x="26" y="52" width="9" height="9" fill="#FACC15" stroke="#1E293B" stroke-width="1.5"/>
+                                <!-- Remera rayada pop -->
+                                <rect x="7" y="20" width="34" height="30" rx="8" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.2"/>
+                                <line x1="8" y1="30" x2="40" y2="30" stroke="#F43F5E" stroke-width="3"/>
+                                <line x1="8" y1="40" x2="40" y2="40" stroke="#10B981" stroke-width="3"/>
+                                <!-- Brazo levantado sosteniendo el hilo -->
+                                <path d="M38 25 L56 8" stroke="#FDBA74" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M38 25 L56 8" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+                                <circle cx="57" cy="7" r="5" fill="#FDBA74" stroke="#1E293B" stroke-width="2"/>
+                                <!-- Cabeza y sonrisa -->
+                                <circle cx="24" cy="4" r="16" fill="#FDBA74" stroke="#1E293B" stroke-width="2.2"/>
+                                <!-- Pelo despeinado -->
+                                <path d="M9 2 C8 -14, 40 -14, 39 2 C34 -6, 14 -6, 9 2 Z" fill="#1E293B"/>
+                                <!-- Ojos y sonrisa mirando al barrilete -->
+                                <circle cx="28" cy="2" r="2" fill="#1E293B"/>
+                                <circle cx="34" cy="2" r="2" fill="#1E293B"/>
+                                <path d="M26 9 Q 31 14 36 8" stroke="#1E293B" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Hilo dinámico del Barrilete -->
+                            <path id="kite-string" d="M 212 282 Q 300 220 410 125" stroke="#1E293B" stroke-width="2" stroke-dasharray="4 3" fill="none"/>
+
+                            <!-- Grupo del Barrilete Volador (Sigue el cursor) -->
+                            <g id="flying-kite-group" transform="translate(410, 125)">
+                                <g id="kite-spinner">
+                                    <!-- Cola de cintas coloridas -->
+                                    <path d="M 0 36 Q -15 58 -5 80 T -18 115" stroke="#1E293B" stroke-width="2.2" fill="none"/>
+                                    <polygon points="-10,55 -2,52 -6,62" fill="#F43F5E" stroke="#1E293B" stroke-width="1.5"/>
+                                    <polygon points="-8,78 2,75 -3,86" fill="#10B981" stroke="#1E293B" stroke-width="1.5"/>
+                                    <polygon points="-16,102 -6,99 -11,110" fill="#8B5CF6" stroke="#1E293B" stroke-width="1.5"/>
+
+                                    <!-- Cuerpo del Barrilete Romboidal Multicolor -->
+                                    <polygon points="0,-38 30,0 0,38 -30,0" fill="#FACC15" stroke="#1E293B" stroke-width="2.8"/>
+                                    <polygon points="0,-38 30,0 0,0" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                                    <polygon points="0,0 -30,0 0,38" fill="#0284C7" stroke="#1E293B" stroke-width="2"/>
+                                    <polygon points="0,0 30,0 0,38" fill="#10B981" stroke="#1E293B" stroke-width="2"/>
+                                    <!-- Varillas cruzadas -->
+                                    <line x1="0" y1="-38" x2="0" y2="38" stroke="#1E293B" stroke-width="2"/>
+                                    <line x1="-30" y1="0" x2="30" y2="0" stroke="#1E293B" stroke-width="2"/>
+                                    <circle cx="0" cy="0" r="5" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+                                </g>
+                            </g>
+
+                            <!-- Capa de partículas/estrellas generadas al impulsar -->
+                            <g id="sky-particles"></g>
+                        </svg>
+
+                        <!-- Etiqueta flotante instructiva -->
+                        <div class="absolute bottom-3 right-3 bg-white/95 border-2 border-slate-900 px-3 py-1 rounded-full text-[11px] font-extrabold text-slate-800 shadow-[2px_2px_0px_#1E293B] pointer-events-none">
+                            👆 Haz clic en el cielo para hacer piruetas
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             2. EXPLORADOR INTERACTIVO DE DATOS (ARGENTINA Y EL MUNDO)
+             ========================================================= -->
+        <section id="datos-section" class="space-y-8 scroll-mt-24">
+            
+            <!-- Encabezado y Controles de Visualización -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full bg-sky-200 border-2 border-slate-900 text-xs font-extrabold uppercase tracking-wider mb-2">
+                        📊 Radiografía Socioeconómica
+                    </span>
+                    <h3 id="datos-title" data-editable="datos-title" class="text-3xl sm:text-4xl font-black text-slate-900">
+                        Explorador de Datos: Argentina y el Mundo
+                    </h3>
+                </div>
+
+                <!-- Controles Interactivos: Pestañas + Switch % / Personas -->
+                <div class="flex flex-wrap items-center gap-3 no-print">
+                    <!-- Pestañas de Región -->
+                    <div class="inline-flex bg-white p-1.5 rounded-2xl border-2 border-slate-900 shadow-[3px_3px_0px_#1E293B]">
+                        <button onclick="switchDataTab('all')" id="tab-all" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-yellow-300 border-2 border-slate-900 text-slate-900 transition">
+                            🌎 Todo
+                        </button>
+                        <button onclick="switchDataTab('argentina')" id="tab-argentina" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-sky-100 transition">
+                            🇦🇷 Argentina
+                        </button>
+                        <button onclick="switchDataTab('mundo')" id="tab-mundo" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-violet-100 transition">
+                            🌐 El Mundo
+                        </button>
+                    </div>
+
+                    <!-- Switch Porcentaje (%) vs Cantidad de Personas -->
+                    <button onclick="toggleMetricUnit()" id="unit-toggle-btn" class="neo-btn bg-sky-400 text-slate-900 px-4 py-2.5 rounded-2xl text-xs font-extrabold flex items-center gap-2">
+                        <i class="fa-solid fa-repeat"></i>
+                        <span id="unit-toggle-label">Viendo: Porcentaje (%)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BLOQUE A: ARGENTINA (INDEC / EPH) -->
+            <div id="panel-argentina" class="space-y-6 print-show-all">
+                <div class="neo-card neo-card-sky rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-sky-50 to-white">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-slate-900/10 pb-5 mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🇦🇷</span>
+                            <div>
+                                <h4 class="text-2xl font-black text-slate-900">1. La Pobreza en la Argentina</h4>
+                                <p class="text-xs font-bold text-sky-700 uppercase tracking-wider">Medición Oficial INDEC • Encuesta Permanente de Hogares (EPH)</p>
+                            </div>
+                        </div>
+                        <!-- Explicación visual CBT vs CBA -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1.5 rounded-xl bg-amber-200 border-2 border-slate-900 text-xs font-extrabold text-slate-900" title="Canasta Básica Alimentaria: umbral de indigencia">
+                                🥖 CBA = Línea de Indigencia
+                            </span>
+                            <span class="px-3 py-1.5 rounded-xl bg-sky-200 border-2 border-slate-900 text-xs font-extrabold text-slate-900" title="Canasta Básica Total: alimentos + bienes y servicios esenciales">
+                                🏠 CBT = Línea de Pobreza
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Explicación CBT y CBA -->
+                    <p id="arg-intro-text" data-editable="arg-intro-text" class="text-sm sm:text-base text-slate-700 font-medium leading-relaxed mb-6">
+                        El INDEC evalúa si los ingresos de los hogares alcanzan para cubrir dos umbrales fundamentales: la <strong>Canasta Básica Alimentaria (CBA)</strong>, que determina la línea de indigencia (requerimientos nutricionales mínimos), y la <strong>Canasta Básica Total (CBT)</strong>, que amplía la CBA incorporando bienes y servicios no alimentarios (transporte, vestimenta, salud, educación) y define la línea de pobreza.
+                    </p>
+
+                    <!-- Tarjetas de Métricas Argentina -->
+                    <div id="argentina-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Card Arg 1: Pobreza General -->
+                        <div class="neo-card neo-card-sky rounded-2xl p-5 flex flex-col justify-between bg-white">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 border border-slate-900 text-xs font-extrabold text-sky-800">Incidencia Urbana</span>
+                                    <span class="text-2xl">🏘️</span>
+                                </div>
+                                <div class="my-2">
+                                    <span id="metric-arg-poverty" data-editable="metric-arg-poverty" class="text-4xl font-black text-sky-600 block">32,3%</span>
+                                    <span id="submetric-arg-poverty" class="text-xs font-bold text-slate-500">de las personas (~9,7 millones) • 24,4% de hogares</span>
+                                </div>
+                                <!-- Barra de progreso animada -->
+                                <div class="w-full h-4 bg-slate-100 rounded-full border-2 border-slate-900 overflow-hidden my-3">
+                                    <div class="h-full bg-sky-500 transition-all duration-700" style="width: 32.3%"></div>
+                                </div>
+                                <p id="desc-arg-1" data-editable="desc-arg-1" class="text-sm text-slate-700 leading-relaxed">
+                                    Casi 1 de cada 3 personas en aglomerados urbanos vive en hogares cuyos ingresos totales no logran cubrir la Canasta Básica Total (CBT).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card Arg 2: Indigencia -->
+                        <div class="neo-card neo-card-sun rounded-2xl p-5 flex flex-col justify-between bg-white">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 border border-slate-900 text-xs font-extrabold text-amber-800">Canasta Alimentaria</span>
+                                    <span class="text-2xl">🥣</span>
+                                </div>
+                                <div class="my-2">
+                                    <span id="metric-arg-indigence" data-editable="metric-arg-indigence" class="text-4xl font-black text-amber-500 block">7,5%</span>
+                                    <span id="submetric-arg-indigence" class="text-xs font-bold text-slate-500">de las personas (~2,2 millones de habitantes)</span>
+                                </div>
+                                <div class="w-full h-4 bg-slate-100 rounded-full border-2 border-slate-900 overflow-hidden my-3">
+                                    <div class="h-full bg-amber-400 transition-all duration-700" style="width: 15%"></div>
+                                </div>
+                                <p id="desc-arg-2" data-editable="desc-arg-2" class="text-sm text-slate-700 leading-relaxed">
+                                    Representa a quienes viven en situación de pobreza extrema: sus ingresos no alcanzan siquiera para adquirir los alimentos básicos de la CBA.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card Arg 3: Infancia (0 a 14 años) -->
+                        <div class="neo-card neo-card-coral rounded-2xl p-5 flex flex-col justify-between bg-white">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg bg-rose-100 border border-slate-900 text-xs font-extrabold text-rose-800">Infancia (0 a 14 años)</span>
+                                    <span class="text-2xl">🧸</span>
+                                </div>
+                                <div class="my-2">
+                                    <span id="metric-arg-children" data-editable="metric-arg-children" class="text-4xl font-black text-rose-500 block">&gt; 44,0%</span>
+                                    <span id="submetric-arg-children" class="text-xs font-bold text-slate-500">de niños y niñas bajo la línea de pobreza</span>
+                                </div>
+                                <!-- Pictograma de 10 niños -->
+                                <div class="flex items-center justify-between bg-rose-50 px-3 py-2 rounded-xl border border-slate-900 my-3" title="Más de 4 de cada 10 niños son pobres">
+                                    <span class="text-base">🧒🏽</span>
+                                    <span class="text-base">👧🏻</span>
+                                    <span class="text-base">🧒🏻</span>
+                                    <span class="text-base">👧🏽</span>
+                                    <span class="text-base opacity-40">🧒🏼</span>
+                                    <span class="text-base opacity-30">👧🏼</span>
+                                    <span class="text-base opacity-30">🧒🏽</span>
+                                    <span class="text-base opacity-30">👧🏻</span>
+                                    <span class="text-base opacity-30">🧒🏻</span>
+                                    <span class="text-base opacity-30">👧🏽</span>
+                                </div>
+                                <p id="desc-arg-3" data-editable="desc-arg-3" class="text-sm text-slate-700 leading-relaxed">
+                                    El impacto generacional más severo: más del 44% de las infancias crecen con privaciones que comprometen su nutrición, educación y futuro.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE B: EL MUNDO (PNUD Y BANCO MUNDIAL) -->
+            <div id="panel-mundo" class="space-y-6 print-show-all">
+                <div class="neo-card neo-card-violet rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-violet-50 to-white">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-slate-900/10 pb-5 mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🌍</span>
+                            <div>
+                                <h4 class="text-2xl font-black text-slate-900">2. La Pobreza en el Mundo</h4>
+                                <p class="text-xs font-bold text-violet-700 uppercase tracking-wider">PNUD & Banco Mundial • Índice de Pobreza Multidimensional (IPM)</p>
+                            </div>
+                        </div>
+                        <!-- 3 Pilares del IPM interactivos -->
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="highlightMpiPillar('salud')" class="px-3 py-1.5 rounded-xl bg-emerald-200 border-2 border-slate-900 text-xs font-extrabold text-slate-900 hover:scale-105 transition">
+                                ❤️ Salud
+                            </button>
+                            <button onclick="highlightMpiPillar('educacion')" class="px-3 py-1.5 rounded-xl bg-sky-200 border-2 border-slate-900 text-xs font-extrabold text-slate-900 hover:scale-105 transition">
+                                📚 Educación
+                            </button>
+                            <button onclick="highlightMpiPillar('vida')" class="px-3 py-1.5 rounded-xl bg-amber-200 border-2 border-slate-900 text-xs font-extrabold text-slate-900 hover:scale-105 transition">
+                                ⚡ Nivel de Vida
+                            </button>
+                        </div>
+                    </div>
+
+                    <p id="world-intro-text" data-editable="world-intro-text" class="text-sm sm:text-base text-slate-700 font-medium leading-relaxed mb-4">
+                        A escala global, el Programa de las Naciones Unidas para el Desarrollo (PNUD) y el Banco Mundial miden la pobreza no solo por ingresos monetarios, sino a través del <strong>Índice de Pobreza Multidimensional (IPM)</strong>, que evalúa carencias simultáneas en tres dimensiones esenciales: <strong>Salud</strong> (nutrición, mortalidad infantil), <strong>Educación</strong> (años de escolaridad, asistencia) y <strong>Nivel de Vida</strong> (agua potable, electricidad, saneamiento, vivienda).
+                    </p>
+
+                    <!-- Caja dinámica de detalle del pilar IPM seleccionado -->
+                    <div id="mpi-pillar-detail" class="bg-violet-100/80 border-2 border-slate-900 rounded-2xl p-3.5 mb-6 text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-3">
+                        <span class="text-xl">💡</span>
+                        <span id="mpi-pillar-text">Haz clic en los botones superiores (Salud, Educación o Nivel de Vida) para explorar qué indicadores mide el IPM global.</span>
+                    </div>
+
+                    <!-- Tarjetas de Métricas Mundiales -->
+                    <div id="mundo-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Card Mundo 1 -->
+                        <div class="neo-card neo-card-violet rounded-2xl p-5 flex flex-col justify-between bg-white">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg bg-violet-100 border border-slate-900 text-xs font-extrabold text-violet-800">Pobreza Multidimensional</span>
+                                    <span class="text-2xl">🌐</span>
+                                </div>
+                                <div class="my-2">
+                                    <span id="metric-world-total" data-editable="metric-world-total" class="text-4xl font-black text-violet-600 block">1.100 M</span>
+                                    <span id="submetric-world-total" class="text-xs font-bold text-slate-500">de personas en situación de pobreza multidimensional</span>
+                                </div>
+                                <div class="w-full h-4 bg-slate-100 rounded-full border-2 border-slate-900 overflow-hidden my-3">
+                                    <div class="h-full bg-violet-500 transition-all duration-700" style="width: 45%"></div>
+                                </div>
+                                <p id="desc-world-1" data-editable="desc-world-1" class="text-sm text-slate-700 leading-relaxed">
+                                    Más de mil cien millones de seres humanos sufren privaciones agudas y simultáneas en servicios básicos, educación y salud alrededor del planeta.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card Mundo 2 -->
+                        <div class="neo-card neo-card-mint rounded-2xl p-5 flex flex-col justify-between bg-white">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-100 border border-slate-900 text-xs font-extrabold text-emerald-800">Menores de 18 Años</span>
+                                    <span class="text-2xl">🎒</span>
+                                </div>
+                                <div class="my-2">
+                                    <span id="metric-world-children" data-editable="metric-world-children" class="text-4xl font-black text-emerald-600 block">58,0%</span>
+                                    <span id="submetric-world-children" class="text-xs font-bold text-slate-500">son niños y adolescentes (~638 millones)</span>
+                                </div>
+                                <div class="w-full h-4 bg-slate-100 rounded-full border-2 border-slate-900 overflow-hidden my-3">
+                                    <div class="h-full bg-emerald-500 transition-all duration-700" style="width: 58%"></div>
+                                </div>
+                                <p id="desc-world-2" data-editable="desc-world-2" class="text-sm text-slate-700 leading-relaxed">
+                                    Más de la mitad de todas las personas pobres del mundo son niños y niñas, lo que convierte a la pobreza global en un fenómeno fuertemente infantil.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card Mundo 3 -->
+                        <div class="neo-card neo-card-coral rounded-2xl p-5 flex flex-col justify-between bg-white">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg bg-rose-100 border border-slate-900 text-xs font-extrabold text-rose-800">Conflictos & Crisis</span>
+                                    <span class="text-2xl">🕊️</span>
+                                </div>
+                                <div class="my-2">
+                                    <span id="metric-world-conflict" data-editable="metric-world-conflict" class="text-4xl font-black text-rose-600 block">~50% (3x)</span>
+                                    <span id="submetric-world-conflict" class="text-xs font-bold text-slate-500">vive en zonas de conflicto (tasas triplican otras regiones)</span>
+                                </div>
+                                <div class="w-full h-4 bg-slate-100 rounded-full border-2 border-slate-900 overflow-hidden my-3">
+                                    <div class="h-full bg-rose-500 transition-all duration-700" style="width: 50%"></div>
+                                </div>
+                                <p id="desc-world-3" data-editable="desc-world-3" class="text-sm text-slate-700 leading-relaxed">
+                                    Casi la mitad de las personas en pobreza multidimensional habitan países afectados por guerras o inestabilidad severa, donde la privación triplica al resto.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPARADOR INTERACTIVO: NIÑOS VS ADULTOS & SIMULADOR -->
+            <div class="neo-card neo-card-sun rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-50 via-yellow-50 to-sky-50 no-print">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-5 space-y-4">
+                        <span class="inline-block px-3 py-1 rounded-full bg-amber-300 border-2 border-slate-900 text-xs font-extrabold uppercase">
+                            ⚖️ Comparador Interactivo
+                        </span>
+                        <h4 class="text-2xl font-black text-slate-900">¿Cómo golpea la pobreza según la edad?</h4>
+                        <p class="text-sm text-slate-700 font-medium leading-relaxed">
+                            Explora la brecha generacional tanto en Argentina como a nivel mundial. Selecciona un escenario o mueve el deslizador de políticas de protección social para ver su impacto.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button onclick="setComparatorMode('argentina')" id="comp-btn-arg" class="neo-btn bg-sky-400 text-slate-900 px-3.5 py-2 rounded-xl text-xs font-extrabold">
+                                🇦🇷 Brecha en Argentina
+                            </button>
+                            <button onclick="setComparatorMode('mundo')" id="comp-btn-world" class="neo-btn bg-white text-slate-900 px-3.5 py-2 rounded-xl text-xs font-bold">
+                                🌍 Brecha en el Mundo
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-2xl border-2 border-slate-900 space-y-2">
+                            <div class="flex justify-between text-xs font-extrabold">
+                                <span>Simular Cobertura de Protección Social:</span>
+                                <span id="protection-val" class="text-emerald-600">50%</span>
+                            </div>
+                            <input type="range" min="10" max="100" value="50" oninput="updateComparatorSlider(this.value)" class="w-full accent-emerald-500 cursor-pointer">
+                            <p id="protection-feedback" class="text-xs font-bold text-slate-600">
+                                Con 50% de cobertura efectiva, se amortigua un 24% de la vulnerabilidad infantil extrema.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Barras Comparativo Dinámico -->
+                    <div class="lg:col-span-7 bg-white border-2 border-slate-900 rounded-3xl p-6 shadow-[4px_4px_0px_#1E293B]">
+                        <h5 id="comp-chart-title" class="text-base font-black text-slate-900 mb-5 flex items-center justify-between">
+                            <span>🇦🇷 Argentina: Incidencia en Infancia vs. Población General</span>
+                            <span class="text-xs font-bold px-2.5 py-1 bg-rose-100 border border-slate-900 rounded-lg text-rose-700">Brecha +11,7 pts</span>
+                        </h5>
+
+                        <div class="space-y-5">
+                            <!-- Barra 1: Niños y Niñas -->
+                            <div>
+                                <div class="flex justify-between text-sm font-extrabold mb-1.5">
+                                    <span id="comp-label-1">🧒🏽 Niños y Niñas (0 a 14 años)</span>
+                                    <span id="comp-val-1" class="text-rose-600">44,0%</span>
+                                </div>
+                                <div class="w-full h-7 bg-slate-100 rounded-2xl border-2 border-slate-900 overflow-hidden p-0.5">
+                                    <div id="comp-bar-1" class="h-full bg-gradient-to-r from-rose-400 to-rose-500 rounded-xl transition-all duration-500 flex items-center justify-end pr-3 text-[11px] font-black text-white" style="width: 44%">
+                                        Mayor vulnerabilidad
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Barra 2: Población General / Adultos -->
+                            <div>
+                                <div class="flex justify-between text-sm font-extrabold mb-1.5">
+                                    <span id="comp-label-2">🧑🏻 Población General Urbana</span>
+                                    <span id="comp-val-2" class="text-sky-600">32,3%</span>
+                                </div>
+                                <div class="w-full h-7 bg-slate-100 rounded-2xl border-2 border-slate-900 overflow-hidden p-0.5">
+                                    <div id="comp-bar-2" class="h-full bg-gradient-to-r from-sky-400 to-sky-500 rounded-xl transition-all duration-500 flex items-center justify-end pr-3 text-[11px] font-black text-white" style="width: 32.3%">
+                                        Promedio
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p id="comp-insight" class="mt-5 pt-4 border-t-2 border-dashed border-slate-200 text-xs font-semibold text-slate-600">
+                            💡 Dato clave: Los hogares con mayor cantidad de niños y niñas suelen tener menor relación de adultos ocupados por integrante, amplificando el impacto de las crisis económicas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             3. LA HISTORIA DE JUANITO LAGUNA + TALLER DE XILOCOLLAGE
+             ========================================================= -->
+        <section id="taller-section" class="space-y-10 scroll-mt-24">
+            
+            <!-- Encabezado Juanito Laguna -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full bg-rose-200 border-2 border-slate-900 text-xs font-extrabold uppercase tracking-wider mb-2">
+                        🎨 Arte Argentino Universal • Antonio Berni
+                    </span>
+                    <h3 id="juanito-main-title" data-editable="juanito-main-title" class="text-3xl sm:text-4xl font-black text-slate-900">
+                        3. La Historia y el Arte de Juanito Laguna
+                    </h3>
+                </div>
+                <span class="px-4 py-2 rounded-2xl bg-yellow-300 border-2 border-slate-900 text-xs font-extrabold shadow-[3px_3px_0px_#1E293B]">
+                    «El material es el mensaje» — Fines de los años 50
+                </span>
+            </div>
+
+            <!-- Historia Ilustrada + Cita Célebre de Berni -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Columna Izquierda: Historia & Técnica Xilocollage -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="neo-card neo-card-coral rounded-3xl p-6 sm:p-8 bg-white space-y-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-300 border-2 border-slate-900 flex items-center justify-center text-2xl shadow-[2px_2px_0px_#1E293B]">
+                                👦🏽
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-black text-slate-900">¿Quién es Juanito Laguna?</h4>
+                                <p class="text-xs font-bold text-rose-600">El niño arquetípico de las periferias industriales</p>
+                            </div>
+                        </div>
+
+                        <p id="juanito-bio-1" data-editable="juanito-bio-1" class="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
+                            Creado por el maestro argentino <strong>Antonio Berni</strong> a fines de la década de 1950, <strong>Juanito Laguna</strong> representa a los niños de los asentamientos precarios y villas miseria del Bajo Flores y los cordones industriales. Hijo de un obrero o cartonero, Juanito juega entre charcos y basurales, remonta barriletes de papel, lleva la vianda a la fábrica y sueña con aprender a leer y viajar al espacio.
+                        </p>
+
+                        <div class="bg-amber-50 border-2 border-slate-900 rounded-2xl p-5 space-y-2">
+                            <div class="flex items-center gap-2 text-sm font-black text-slate-900">
+                                <span>🪵🥫</span>
+                                <span>La Revolución del Xilocollage: «El material es el mensaje»</span>
+                            </div>
+                            <p id="juanito-tech-text" data-editable="juanito-tech-text" class="text-sm text-slate-700 leading-relaxed">
+                                Berni abandonó los óleos tradicionales para recolectar desechos reales de los basurales urbanos: <strong>latas oxidadas, cartones corrugados, maderas rotas, chapas, botones, plásticos y alambres</strong>. Combinó estos objetos con grabados en madera de gran formato (<em>xilocollage</em>), logrando que la obra estuviera construida literalmente con los mismos desperdicios de la sociedad de consumo que marginaba a Juanito.
+                            </p>
+                        </div>
+
+                        <!-- Cita Célebre de Berni -->
+                        <blockquote class="bg-gradient-to-r from-sky-100 via-yellow-100 to-rose-100 border-2 border-slate-900 rounded-2xl p-5 relative shadow-[4px_4px_0px_#1E293B]">
+                            <i class="fa-solid fa-quote-left text-2xl text-slate-900/30 mb-1 block"></i>
+                            <p id="berni-quote" data-editable="berni-quote" class="text-base sm:text-lg font-extrabold text-slate-900 italic leading-snug">
+                                «Juanito Laguna es un chico pobre, pero no un pobre chico. No es un vencido por las circunstancias, sino un ser lleno de vida y esperanzas que supera su miseria circunstancial porque intuye vivir en un mundo cargado de porvenir.»
+                            </p>
+                            <footer class="mt-2 text-xs font-black uppercase tracking-wider text-sky-800">
+                                — Antonio Berni
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Explorador de Series Icónicas de Juanito -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="neo-card neo-card-mint rounded-3xl p-6 bg-white space-y-4">
+                        <h4 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                            <span>🖼️</span> <span>Obras y Series Emblemáticas</span>
+                        </h4>
+                        <p class="text-xs font-semibold text-slate-500">Haz clic en cada obra para explorar su historia e ilustración:</p>
+
+                        <!-- Botones de selección de serie -->
+                        <div class="grid grid-cols-3 gap-2 no-print">
+                            <button onclick="selectJuanitoSeries(0)" id="series-btn-0" class="neo-btn bg-yellow-300 text-slate-900 p-2 rounded-xl text-xs font-extrabold text-center">
+                                🏙️ Va a la ciudad
+                            </button>
+                            <button onclick="selectJuanitoSeries(1)" id="series-btn-1" class="neo-btn bg-white text-slate-900 p-2 rounded-xl text-xs font-bold text-center">
+                                📖 Aprende a leer
+                            </button>
+                            <button onclick="selectJuanitoSeries(2)" id="series-btn-2" class="neo-btn bg-white text-slate-900 p-2 rounded-xl text-xs font-bold text-center">
+                                🎄 Navidad
+                            </button>
+                        </div>
+
+                        <!-- Visor de Ilustración SVG de la Serie -->
+                        <div id="series-artwork-box" class="w-full h-48 rounded-2xl border-2 border-slate-900 overflow-hidden bg-sky-100 flex items-center justify-center">
+                            <!-- Se rellena dinámicamente con SVG artístico -->
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <h5 id="series-title" data-editable="series-title" class="text-lg font-black text-slate-900">Juanito va a la ciudad (1963)</h5>
+                            <p id="series-desc" data-editable="series-desc" class="text-sm text-slate-700 leading-relaxed">
+                                Juanito camina hacia la gran urbe cargando sus pertenencias entre cartones, chapas y publicidad descartada. Contrasta la inocencia del niño con la frialdad industrial de la metrópoli moderna.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =========================================================
+                 MINI-APP INTERACTIVA: ARMA TU PROPIO XILOCOLLAGE DE JUANITO
+                 ========================================================= -->
+            <div class="neo-card neo-card-violet rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-violet-50 via-white to-amber-50">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-violet-200 border-2 border-slate-900 text-xs font-extrabold uppercase mb-1">
+                            ✂️ Taller Creativo Interactivo
+                        </span>
+                        <h4 class="text-2xl sm:text-3xl font-black text-slate-900">Arma tu propio Xilocollage de Juanito</h4>
+                        <p class="text-sm text-slate-600 font-medium">Haz clic en los materiales reciclados para agregarlos al cuadro y arrástralos con el mouse o el dedo.</p>
+                    </div>
+
+                    <!-- Selector de Fondo del Cuadro -->
+                    <div class="flex flex-wrap items-center gap-2 no-print">
+                        <span class="text-xs font-extrabold text-slate-700">Fondo:</span>
+                        <button onclick="setCollageBg('sky')" class="neo-btn bg-sky-200 px-3 py-1.5 rounded-xl text-xs font-bold">☁️ Cielo Flores</button>
+                        <button onclick="setCollageBg('night')" class="neo-btn bg-indigo-900 text-white px-3 py-1.5 rounded-xl text-xs font-bold">🌙 Noche Chapa</button>
+                        <button onclick="setCollageBg('sunset')" class="neo-btn bg-amber-200 px-3 py-1.5 rounded-xl text-xs font-bold">☀️ Sol Cartón</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    
+                    <!-- Paleta de Stickers / Materiales de Collage -->
+                    <div class="lg:col-span-4 bg-white border-2 border-slate-900 rounded-2xl p-4 space-y-4 no-print">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">1. Elige Materiales Reciclados:</div>
+                        <div class="grid grid-cols-2 gap-2.5" id="collage-palette">
+                            <button onclick="addCollageSticker('kite')" class="neo-btn bg-yellow-100 hover:bg-yellow-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">🪁</span>
+                                <span class="text-xs font-extrabold leading-tight">Barrilete Multicolor</span>
+                            </button>
+                            <button onclick="addCollageSticker('tinmoon')" class="neo-btn bg-slate-100 hover:bg-slate-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">🌙</span>
+                                <span class="text-xs font-extrabold leading-tight">Luna de Lata</span>
+                            </button>
+                            <button onclick="addCollageSticker('cardstar')" class="neo-btn bg-amber-100 hover:bg-amber-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">⭐</span>
+                                <span class="text-xs font-extrabold leading-tight">Estrella de Cartón</span>
+                            </button>
+                            <button onclick="addCollageSticker('sun')" class="neo-btn bg-orange-100 hover:bg-orange-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">☀️</span>
+                                <span class="text-xs font-extrabold leading-tight">Sol Brillante</span>
+                            </button>
+                            <button onclick="addCollageSticker('bird')" class="neo-btn bg-sky-100 hover:bg-sky-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">🕊️</span>
+                                <span class="text-xs font-extrabold leading-tight">Pajarito de Papel</span>
+                            </button>
+                            <button onclick="addCollageSticker('flower')" class="neo-btn bg-rose-100 hover:bg-rose-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">🌺</span>
+                                <span class="text-xs font-extrabold leading-tight">Flor Reciclada</span>
+                            </button>
+                            <button onclick="addCollageSticker('gear')" class="neo-btn bg-emerald-100 hover:bg-emerald-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">⚙️</span>
+                                <span class="text-xs font-extrabold leading-tight">Engranaje</span>
+                            </button>
+                            <button onclick="addCollageSticker('cloud')" class="neo-btn bg-violet-100 hover:bg-violet-200 p-2.5 rounded-xl flex items-center gap-2 text-left">
+                                <span class="text-xl">☁️</span>
+                                <span class="text-xs font-extrabold leading-tight">Nube de Chapa</span>
+                            </button>
+                        </div>
+
+                        <!-- Controles del Sticker Seleccionado -->
+                        <div class="pt-3 border-t-2 border-dashed border-slate-200 space-y-2.5">
+                            <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">2. Ajustar Pieza Seleccionada:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="transformSelectedSticker('scaleUp')" class="neo-btn bg-white px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Agrandar">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                </button>
+                                <button onclick="transformSelectedSticker('scaleDown')" class="neo-btn bg-white px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Achicar">
+                                    <i class="fa-solid fa-magnifying-glass-minus"></i>
+                                </button>
+                                <button onclick="transformSelectedSticker('rotate')" class="neo-btn bg-white px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Rotar">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                </button>
+                                <button onclick="deleteSelectedSticker()" class="neo-btn bg-rose-100 text-rose-700 px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Quitar pieza">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Acciones del Lienzo -->
+                        <div class="pt-3 border-t-2 border-dashed border-slate-200 flex flex-wrap gap-2">
+                            <button onclick="resetCollageCanvas()" class="neo-btn bg-slate-200 text-slate-900 px-3 py-2 rounded-xl text-xs font-bold flex-1">
+                                🧹 Reiniciar
+                            </button>
+                            <button onclick="downloadCollagePNG()" class="neo-btn bg-emerald-400 text-slate-900 px-3 py-2 rounded-xl text-xs font-extrabold flex-1">
+                                💾 Guardar Obra PNG
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lienzo Interactivo SVG del Xilocollage -->
+                    <div class="lg:col-span-8">
+                        <div class="relative w-full h-[360px] sm:h-[420px] rounded-3xl border-4 border-slate-900 shadow-[8px_8px_0px_#1E293B] overflow-hidden bg-sky-200">
+                            <svg id="xilocollage-svg" viewBox="0 0 700 420" class="w-full h-full block touch-none">
+                                <!-- Fondo dinámico -->
+                                <rect id="collage-bg-rect" x="0" y="0" width="700" height="420" fill="#BAE6FD"/>
+                                <!-- Textura collage base -->
+                                <path d="M0 310 Q 220 270 450 315 T 700 295 V 420 H 0 Z" fill="#FDE047" stroke="#1E293B" stroke-width="3"/>
+                                <path d="M0 350 Q 320 325 700 360 V 420 H 0 Z" fill="#FB7185" stroke="#1E293B" stroke-width="3"/>
+                                
+                                <!-- Casita base de Juanito en la esquina -->
+                                <g transform="translate(45, 230)">
+                                    <rect x="0" y="25" width="75" height="65" fill="#D97706" stroke="#1E293B" stroke-width="2.5"/>
+                                    <polygon points="-8,25 37,-2 83,25" fill="#94A3B8" stroke="#1E293B" stroke-width="2.5"/>
+                                    <rect x="25" y="48" width="22" height="42" fill="#FEF08A" stroke="#1E293B" stroke-width="2"/>
+                                </g>
+
+                                <!-- Contenedor de Stickers Arrastrables -->
+                                <g id="collage-stickers-layer"></g>
+
+                                <!-- Firma del artista en el cuadro -->
+                                <g transform="translate(515, 392)">
+                                    <rect x="0" y="0" width="165" height="20" rx="6" fill="#FFFFFF" stroke="#1E293B" stroke-width="1.8"/>
+                                    <text x="82" y="14" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="800" font-size="10" fill="#1E293B">MI XILOCOLLAGE • JUANITO</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             4. TRIVIA INTERACTIVA RELÁMPAGO (8 PREGUNTAS)
+             ========================================================= -->
+        <section id="trivia-section" class="space-y-6 no-print">
+            <div class="neo-card neo-card-mint rounded-3xl p-6 sm:p-10 bg-gradient-to-br from-emerald-50 via-white to-yellow-50">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-slate-900/10 pb-5 mb-6">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-emerald-300 border-2 border-slate-900 text-xs font-extrabold uppercase mb-1">
+                            ⚡ Desafío de Conocimiento
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900">Trivia Relámpago: ¿Cuánto sabes?</h3>
+                    </div>
+
+                    <!-- Marcador de Puntaje y Racha -->
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white border-2 border-slate-900 px-3.5 py-2 rounded-2xl text-xs font-extrabold shadow-[2px_2px_0px_#1E293B]">
+                            🔥 Racha: <span id="trivia-streak" class="text-orange-600">0</span>
+                        </div>
+                        <div class="bg-yellow-300 border-2 border-slate-900 px-3.5 py-2 rounded-2xl text-xs font-extrabold shadow-[2px_2px_0px_#1E293B]">
+                            🏆 Puntos: <span id="trivia-score">0</span> / 8
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra de progreso de la Trivia -->
+                <div class="w-full h-4 bg-white rounded-full border-2 border-slate-900 overflow-hidden mb-6">
+                    <div id="trivia-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-500" style="width: 12.5%"></div>
+                </div>
+
+                <!-- Contenedor de Pregunta Activa -->
+                <div id="trivia-game-box" class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <span id="trivia-q-number" class="px-3 py-1 rounded-xl bg-sky-200 border border-slate-900 text-xs font-extrabold">Pregunta 1 de 8</span>
+                        <span id="trivia-q-category" class="text-xs font-bold text-slate-500 uppercase">Categoría: Argentina</span>
+                    </div>
+
+                    <h4 id="trivia-question-text" class="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                        Cargando pregunta...
+                    </h4>
+
+                    <!-- Opciones de Respuesta -->
+                    <div id="trivia-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <!-- Botones generados dinámicamente -->
+                    </div>
+
+                    <!-- Feedback Educativo Inmediato -->
+                    <div id="trivia-feedback-box" class="hidden rounded-2xl border-2 border-slate-900 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span id="trivia-feedback-icon" class="text-2xl">✅</span>
+                            <div>
+                                <div id="trivia-feedback-title" class="font-black text-base">¡Correcto!</div>
+                                <p id="trivia-feedback-desc" class="text-sm font-medium mt-0.5"></p>
+                            </div>
+                        </div>
+                        <button onclick="nextTriviaQuestion()" class="neo-btn bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-extrabold shrink-0">
+                            Siguiente <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pantalla Final con Medalla -->
+                <div id="trivia-result-box" class="hidden text-center py-6 space-y-5">
+                    <div id="trivia-medal-emoji" class="text-6xl animate-bounce">🥇</div>
+                    <h4 id="trivia-result-title" class="text-3xl font-black text-slate-900">¡Excelente Desempeño!</h4>
+                    <p id="trivia-result-summary" class="text-base text-slate-700 font-medium max-w-xl mx-auto"></p>
+                    <button onclick="restartTrivia()" class="neo-btn bg-yellow-300 text-slate-900 px-6 py-3 rounded-2xl text-sm font-extrabold inline-flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Jugar de Nuevo</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             SECCIÓN DE TARJETAS PERSONALIZADAS AGREGADAS POR EL USUARIO
+             ========================================================= -->
+        <section id="custom-cards-section" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+                    <span>✨</span> <span>Tarjetas y Recursos Personalizados</span>
+                </h3>
+            </div>
+            <div id="custom-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Tarjetas personalizadas agregadas desde el Modo Estudio -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-white border-t-2 border-slate-900 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-slate-600">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">🪁</span>
+                <span>Experiencia Educativa Interactiva • Datos: INDEC (EPH), PNUD y Banco Mundial • Homenaje a Antonio Berni.</span>
+            </div>
+            <div class="flex items-center gap-3 no-print editor-ui">
+                <button onclick="toggleStudioDrawer()" class="underline hover:text-slate-900">Abrir Estudio de Edición</button>
+                <span>•</span>
+                <button onclick="exportPDF()" class="underline hover:text-slate-900">Imprimir / PDF</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================================
+         5. PANEL LATERAL DESLIZABLE: MODO ESTUDIO / EDITAR TODO
+         ========================================================= -->
+    <aside id="studio-drawer" class="fixed inset-y-0 right-0 w-full sm:w-[430px] bg-white border-l-4 border-slate-900 z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-2xl no-print">
+        
+        <!-- Cabecera del Estudio -->
+        <div class="p-5 bg-yellow-300 border-b-2 border-slate-900 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <span class="text-2xl">🛠️</span>
+                <div>
+                    <h3 class="text-lg font-black text-slate-900 leading-tight">Modo Estudio / Editor Total</h3>
+                    <p class="text-[11px] font-bold text-slate-800">Edita textos, cifras, imágenes o trivia en vivo</p>
+                </div>
+            </div>
+            <button onclick="toggleStudioDrawer()" class="neo-btn bg-white w-9 h-9 rounded-xl flex items-center justify-center font-black">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Contenido Scrolleable del Estudio -->
+        <div class="flex-grow overflow-y-auto p-5 space-y-6">
+            
+            <!-- 1. Edición Directa en Pantalla -->
+            <div class="bg-violet-50 border-2 border-slate-900 rounded-2xl p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-black text-slate-900">✍️ Edición Directa en Pantalla</span>
+                    <button id="inline-edit-toggle" onclick="toggleInlineEdit()" class="neo-btn bg-violet-500 text-white px-3 py-1.5 rounded-xl text-xs font-extrabold">
+                        Activar Clic para Editar
+                    </button>
+                </div>
+                <p class="text-xs text-slate-600 font-medium">
+                    Al activarlo, haz clic sobre <strong>cualquier título, cifra o párrafo</strong> de la página para escribir directamente.
+                </p>
+            </div>
+
+            <!-- 2. Agregar Nueva Tarjeta Personalizada -->
+            <div class="bg-sky-50 border-2 border-slate-900 rounded-2xl p-4 space-y-3">
+                <h4 class="text-sm font-black text-slate-900">➕ Agregar Tarjeta o Dibujo Nuevo</h4>
+                
+                <div class="space-y-2">
+                    <label class="text-xs font-bold block">Título de la tarjeta:</label>
+                    <input id="new-card-title" type="text" placeholder="Ej: Educación y Futuro en el Barrio" class="w-full px-3 py-2 rounded-xl border-2 border-slate-900 text-xs font-semibold bg-white">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold block">Texto o dato destacado:</label>
+                    <textarea id="new-card-text" rows="2" placeholder="Escribe tu reflexión, cifra o historia..." class="w-full px-3 py-2 rounded-xl border-2 border-slate-900 text-xs font-semibold bg-white"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold block mb-1">Color de tarjeta:</label>
+                        <select id="new-card-color" class="w-full px-2.5 py-2 rounded-xl border-2 border-slate-900 text-xs font-bold bg-white">
+                            <option value="sky">Celeste Cielo</option>
+                            <option value="sun">Amarillo Sol</option>
+                            <option value="coral">Coral Vibrante</option>
+                            <option value="mint">Verde Menta</option>
+                            <option value="violet">Violeta Pop</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold block mb-1">Ilustración SVG:</label>
+                        <select id="new-card-svg" class="w-full px-2.5 py-2 rounded-xl border-2 border-slate-900 text-xs font-bold bg-white">
+                            <option value="kite">🪁 Barrilete</option>
+                            <option value="sun">☀️ Sol Collage</option>
+                            <option value="globe">🌍 Planeta</option>
+                            <option value="heart">❤️ Solidaridad</option>
+                            <option value="book">📚 Libro Abierto</option>
+                            <option value="factory">🏭 Industria/Barrio</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Subir Imagen Propia desde la Computadora -->
+                <div class="pt-1">
+                    <label class="text-xs font-bold block mb-1">O sube una imagen propia (opcional):</label>
+                    <input id="new-card-file" type="file" accept="image/*" class="w-full text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-2 file:border-slate-900 file:text-xs file:font-bold file:bg-yellow-300 file:text-slate-900 hover:file:bg-yellow-400">
+                </div>
+
+                <button onclick="addCustomCard()" class="w-full neo-btn bg-emerald-400 text-slate-900 py-2.5 rounded-xl text-xs font-extrabold">
+                    ✨ Crear y Sumar Tarjeta a la Página
+                </button>
+            </div>
+
+            <!-- 3. Editor Rápido de Preguntas de la Trivia -->
+            <div class="bg-amber-50 border-2 border-slate-900 rounded-2xl p-4 space-y-3">
+                <h4 class="text-sm font-black text-slate-900">⚡ Editar Preguntas de la Trivia</h4>
+                <select id="edit-trivia-select" onchange="loadTriviaQuestionToEditor()" class="w-full px-3 py-2 rounded-xl border-2 border-slate-900 text-xs font-bold bg-white">
+                    <!-- Opciones cargadas por JS -->
+                </select>
+                <input id="edit-trivia-q" type="text" class="w-full px-3 py-2 rounded-xl border-2 border-slate-900 text-xs font-semibold bg-white" placeholder="Texto de la pregunta">
+                <input id="edit-trivia-exp" type="text" class="w-full px-3 py-2 rounded-xl border-2 border-slate-900 text-xs font-semibold bg-white" placeholder="Explicación educativa">
+                <button onclick="saveEditedTriviaQuestion()" class="w-full neo-btn bg-amber-300 text-slate-900 py-2 rounded-xl text-xs font-extrabold">
+                    Actualizar Pregunta
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Barra Inferior de Guardado y Restauración -->
+        <div class="p-4 bg-slate-100 border-t-2 border-slate-900 space-y-2">
+            <div class="flex gap-2">
+                <button onclick="saveAllState(true)" class="flex-1 neo-btn bg-sky-500 text-white py-2.5 rounded-xl text-xs font-extrabold">
+                    💾 Guardar Cambios
+                </button>
+                <button id="reset-confirm-btn" onclick="handleResetRequest()" class="neo-btn bg-white text-rose-600 px-3.5 py-2.5 rounded-xl text-xs font-extrabold">
+                    Restaurar Original
+                </button>
+            </div>
+            <p class="text-[10px] text-center font-bold text-slate-500">Todos tus cambios se guardan automáticamente en este navegador.</p>
+        </div>
+    </aside>
+
+    <!-- =========================================================
+         JAVASCRIPT: SONIDO WEB AUDIO API, INTERACTIVIDAD Y ESTADO
+         ========================================================= -->
+    <script>
+        /* -----------------------------------------------------------
+           1. SINTETIZADOR DE SONIDO WEB AUDIO API (SIN ARCHIVOS EXTERNOS)
+           ----------------------------------------------------------- */
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+                this.ambientPlaying = false;
+                this.ambientInterval = null;
+            }
+
+            ensureContext() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) {
+                        this.ctx = new AudioCtx();
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            // Sonido cristalino tipo marimba/kalimba
+            playMarimba(freq = 523.25, duration = 0.25) {
+                if (!this.enabled) return;
+                this.ensureContext();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const overtone = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+
+                overtone.type = 'triangle';
+                overtone.frequency.setValueAtTime(freq * 2, now);
+
+                const overtoneGain = this.ctx.createGain();
+                overtoneGain.gain.setValueAtTime(0.15, now);
+                overtoneGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(0.22, now + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                osc.connect(gain);
+                overtone.connect(overtoneGain);
+                overtoneGain.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                overtone.start(now);
+                osc.stop(now + duration);
+                overtone.stop(now + duration);
+            }
+
+            // Efecto de viento suave + campanillas al impulsar el barrilete
+            playWindChimes() {
+                if (!this.enabled) return;
+                this.ensureContext();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Ruido blanco filtrado (brisa)
+                const bufferSize = this.ctx.sampleRate * 0.7;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(450, now);
+                filter.frequency.exponentialRampToValueAtTime(1100, now + 0.5);
+                filter.Q.value = 2.5;
+
+                const windGain = this.ctx.createGain();
+                windGain.gain.setValueAtTime(0.01, now);
+                windGain.gain.linearRampToValueAtTime(0.12, now + 0.2);
+                windGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+                noise.connect(filter);
+                filter.connect(windGain);
+                windGain.connect(this.ctx.destination);
+                noise.start(now);
+
+                // Campanillas pentatónicas
+                const notes = [523.25, 659.25, 783.99, 987.77, 1174.66];
+                notes.forEach((n, idx) => {
+                    setTimeout(() => this.playMarimba(n, 0.35), idx * 75);
+                });
+            }
+
+            // Fanfarria alegre para aciertos
+            playSuccess() {
+                if (!this.enabled) return;
+                const fanfare = [523.25, 659.25, 783.99, 1046.50];
+                fanfare.forEach((note, i) => {
+                    setTimeout(() => this.playMarimba(note, 0.3), i * 95);
+                });
+            }
+
+            // Sonido suave de error
+            playError() {
+                if (!this.enabled) return;
+                this.playMarimba(246.94, 0.22);
+                setTimeout(() => this.playMarimba(196.00, 0.32), 140);
+            }
+
+            // Música ambiental lo-fi / kalimba generada por código
+            toggleAmbient() {
+                this.ensureContext();
+                this.ambientPlaying = !this.ambientPlaying;
+                if (this.ambientPlaying) {
+                    const scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+                    this.ambientInterval = setInterval(() => {
+                        if (!this.enabled || !this.ambientPlaying) return;
+                        const note = scale[Math.floor(Math.random() * scale.length)];
+                        this.playMarimba(note, 0.9);
+                    }, 1600);
+                } else {
+                    clearInterval(this.ambientInterval);
+                }
+                return this.ambientPlaying;
+            }
+        }
+
+        const soundEngine = new SoundEngine();
+
+        function toggleSound() {
+            soundEngine.enabled = !soundEngine.enabled;
+            const label = document.getElementById('sound-label');
+            const eq = document.getElementById('sound-eq');
+            const btn = document.getElementById('sound-toggle-btn');
+
+            if (soundEngine.enabled) {
+                label.textContent = 'Sonido: ON';
+                eq.classList.add('eq-active');
+                btn.classList.replace('bg-slate-200', 'bg-emerald-300');
+                soundEngine.playMarimba(659.25);
+            } else {
+                label.textContent = 'Sonido: OFF';
+                eq.classList.remove('eq-active');
+                btn.classList.replace('bg-emerald-300', 'bg-slate-200');
+            }
+        }
+
+        function toggleAmbientMusic() {
+            const active = soundEngine.toggleAmbient();
+            const label = document.getElementById('ambient-label');
+            const btn = document.getElementById('ambient-toggle-btn');
+            if (active) {
+                label.textContent = 'Lo-Fi: ON';
+                btn.classList.replace('bg-violet-200', 'bg-violet-400');
+                showToast('🎶 Música ambiental Lo-Fi activada');
+            } else {
+                label.textContent = 'Lo-Fi: OFF';
+                btn.classList.replace('bg-violet-400', 'bg-violet-200');
+                showToast('🔇 Música ambiental pausada');
+            }
+        }
+
+        /* -----------------------------------------------------------
+           2. SELECTOR DE PALETAS DE COLORES
+           ----------------------------------------------------------- */
+        function setTheme(theme) {
+            document.body.classList.remove('theme-neon', 'theme-sunset');
+            if (theme === 'neon') document.body.classList.add('theme-neon');
+            if (theme === 'sunset') document.body.classList.add('theme-sunset');
+
+            ['default', 'neon', 'sunset'].forEach(t => {
+                const btn = document.getElementById(`btn-theme-${t}`);
+                if (t === theme) {
+                    btn.classList.add('border-2', 'border-slate-900', 'bg-yellow-300');
+                } else {
+                    btn.classList.remove('border-2', 'border-slate-900', 'bg-yellow-300');
+                }
+            });
+            soundEngine.playMarimba(587.33);
+        }
+
+        /* -----------------------------------------------------------
+           3. HERO INTERACTIVO: BARRILETE QUE SIGUE EL CURSOR Y PIRUETAS
+           ----------------------------------------------------------- */
+        let kiteBoostCounter = 0;
+        const skyContainer = document.getElementById('kite-sky-container');
+        const kiteGroup = document.getElementById('flying-kite-group');
+        const kiteString = document.getElementById('kite-string');
+        const kiteSpinner = document.getElementById('kite-spinner');
+
+        function moveKiteToPoint(clientX, clientY) {
+            const rect = skyContainer.getBoundingClientRect();
+            const relX = (clientX - rect.left) / rect.width;
+            const relY = (clientY - rect.top) / rect.height;
+
+            // Mapear a coordenadas SVG (viewBox 600x420)
+            const targetX = Math.max(180, Math.min(545, relX * 600));
+            const targetY = Math.max(45, Math.min(230, relY * 420));
+
+            kiteGroup.setAttribute('transform', `translate(${targetX.toFixed(1)}, ${targetY.toFixed(1)})`);
+
+            // Actualizar cuerda curva desde la mano de Juanito (212, 282)
+            const ctrlX = (212 + targetX) / 2 - 20;
+            const ctrlY = Math.max(targetY + 40, (282 + targetY) / 2 + 25);
+            kiteString.setAttribute('d', `M 212 282 Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${targetX.toFixed(1)} ${targetY.toFixed(1)}`);
+
+            // Actualizar medidor de altura
+            const meters = Math.round(350 - targetY);
+            document.getElementById('kite-altitude-text').textContent = `${meters} metros de altura • ¡El cielo es el límite!`;
+        }
+
+        skyContainer.addEventListener('mousemove', (e) => moveKiteToPoint(e.clientX, e.clientY));
+        skyContainer.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                moveKiteToPoint(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        function boostKite() {
+            kiteBoostCounter++;
+            document.getElementById('kite-boost-count').textContent = `${kiteBoostCounter} pirueta${kiteBoostCounter === 1 ? '' : 's'}`;
+            
+            soundEngine.playWindChimes();
+
+            // Reiniciar animación de pirueta
+            kiteSpinner.classList.remove('kite-spin');
+            void kiteSpinner.offsetWidth;
+            kiteSpinner.classList.add('kite-spin');
+
+            // Generar estrellitas de colores en el cielo SVG
+            const particlesLayer = document.getElementById('sky-particles');
+            const colors = ['#FACC15', '#F43F5E', '#10B981', '#8B5CF6', '#FFFFFF'];
+            for (let i = 0; i < 8; i++) {
+                const star = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const cx = 240 + Math.random() * 280;
+                const cy = 50 + Math.random() * 160;
+                star.setAttribute('cx', cx);
+                star.setAttribute('cy', cy);
+                star.setAttribute('r', 4 + Math.random() * 4);
+                star.setAttribute('fill', colors[i % colors.length]);
+                star.setAttribute('stroke', '#1E293B');
+                star.setAttribute('stroke-width', '1.5');
+                particlesLayer.appendChild(star);
+
+                setTimeout(() => star.remove(), 950);
+            }
+        }
+
+        /* -----------------------------------------------------------
+           4. EXPLORADOR DE DATOS: PESTAÑAS, % VS PERSONAS Y COMPARADOR
+           ----------------------------------------------------------- */
+        let currentMetricUnit = 'percent'; // 'percent' o 'people'
+
+        function switchDataTab(tab) {
+            soundEngine.playMarimba(440);
+            const panelArg = document.getElementById('panel-argentina');
+            const panelWorld = document.getElementById('panel-mundo');
+
+            ['all', 'argentina', 'mundo'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-yellow-300 border-2 border-slate-900 text-slate-900 transition';
+                } else {
+                    btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition';
+                }
+            });
+
+            if (tab === 'all') {
+                panelArg.classList.remove('hidden');
+                panelWorld.classList.remove('hidden');
+            } else if (tab === 'argentina') {
+                panelArg.classList.remove('hidden');
+                panelWorld.classList.add('hidden');
+            } else {
+                panelArg.classList.add('hidden');
+                panelWorld.classList.remove('hidden');
+            }
+        }
+
+        function toggleMetricUnit() {
+            soundEngine.playMarimba(587.33);
+            currentMetricUnit = currentMetricUnit === 'percent' ? 'people' : 'percent';
+            const btnLabel = document.getElementById('unit-toggle-label');
+
+            if (currentMetricUnit === 'people') {
+                btnLabel.textContent = 'Viendo: Cantidad de Personas';
+                document.getElementById('metric-arg-poverty').textContent = '~9,7 M';
+                document.getElementById('submetric-arg-poverty').textContent = 'personas en pobreza urbana (32,3%)';
+                document.getElementById('metric-arg-indigence').textContent = '~2,2 M';
+                document.getElementById('submetric-arg-indigence').textContent = 'personas en indigencia (7,5%)';
+                document.getElementById('metric-arg-children').textContent = '> 4,4 de 10';
+                document.getElementById('submetric-arg-children').textContent = 'niños y niñas de 0 a 14 años (>44%)';
+
+                document.getElementById('metric-world-total').textContent = '1.100 M';
+                document.getElementById('metric-world-children').textContent = '~638 M';
+                document.getElementById('submetric-world-children').textContent = 'menores de 18 años (58% del total)';
+                document.getElementById('metric-world-conflict').textContent = '~550 M';
+                document.getElementById('submetric-world-conflict').textContent = 'personas en zonas de conflicto (~50%)';
+            } else {
+                btnLabel.textContent = 'Viendo: Porcentaje (%)';
+                document.getElementById('metric-arg-poverty').textContent = '32,3%';
+                document.getElementById('submetric-arg-poverty').textContent = 'de las personas (~9,7 millones) • 24,4% de hogares';
+                document.getElementById('metric-arg-indigence').textContent = '7,5%';
+                document.getElementById('submetric-arg-indigence').textContent = 'de las personas (~2,2 millones de habitantes)';
+                document.getElementById('metric-arg-children').textContent = '> 44,0%';
+                document.getElementById('submetric-arg-children').textContent = 'de niños y niñas bajo la línea de pobreza';
+
+                document.getElementById('metric-world-total').textContent = '1.100 M';
+                document.getElementById('metric-world-children').textContent = '58,0%';
+                document.getElementById('submetric-world-children').textContent = 'son niños y adolescentes (~638 millones)';
+                document.getElementById('metric-world-conflict').textContent = '~50% (3x)';
+                document.getElementById('submetric-world-conflict').textContent = 'vive en zonas de conflicto (tasas triplican otras regiones)';
+            }
+        }
+
+        function highlightMpiPillar(pillar) {
+            soundEngine.playMarimba(659.25);
+            const textEl = document.getElementById('mpi-pillar-text');
+            const info = {
+                salud: '❤️ Dimensión Salud (IPM): Evalúa la nutrición adecuada de los integrantes del hogar y la tasa de mortalidad infantil.',
+                educacion: '📚 Dimensión Educación (IPM): Analiza si los adultos completaron al menos 6 años de escolaridad y si los niños asisten regularmente a la escuela.',
+                vida: '⚡ Dimensión Nivel de Vida (IPM): Mide el acceso a agua potable, electricidad, saneamiento digno, combustible limpio para cocinar y materiales de vivienda.'
+            };
+            textEl.textContent = info[pillar];
+        }
+
+        // Comparador Interactivo
+        let comparatorRegion = 'argentina';
+        function setComparatorMode(region) {
+            soundEngine.playMarimba(523.25);
+            comparatorRegion = region;
+            const btnArg = document.getElementById('comp-btn-arg');
+            const btnWorld = document.getElementById('comp-btn-world');
+
+            if (region === 'argentina') {
+                btnArg.className = 'neo-btn bg-sky-400 text-slate-900 px-3.5 py-2 rounded-xl text-xs font-extrabold';
+                btnWorld.className = 'neo-btn bg-white text-slate-900 px-3.5 py-2 rounded-xl text-xs font-bold';
+                document.getElementById('comp-chart-title').innerHTML = `<span>🇦🇷 Argentina: Incidencia en Infancia vs. Población General</span><span class="text-xs font-bold px-2.5 py-1 bg-rose-100 border border-slate-900 rounded-lg text-rose-700">Brecha +11,7 pts</span>`;
+                document.getElementById('comp-label-1').textContent = '🧒🏽 Niños y Niñas (0 a 14 años)';
+                document.getElementById('comp-val-1').textContent = '44,0%';
+                document.getElementById('comp-bar-1').style.width = '44%';
+                document.getElementById('comp-label-2').textContent = '🧑🏻 Población General Urbana';
+                document.getElementById('comp-val-2').textContent = '32,3%';
+                document.getElementById('comp-bar-2').style.width = '32.3%';
+                document.getElementById('comp-insight').textContent = '💡 Dato clave: En Argentina, más de 4 de cada 10 niños viven en hogares bajo la línea de pobreza, superando ampliamente el promedio general.';
+            } else {
+                btnWorld.className = 'neo-btn bg-violet-400 text-slate-900 px-3.5 py-2 rounded-xl text-xs font-extrabold';
+                btnArg.className = 'neo-btn bg-white text-slate-900 px-3.5 py-2 rounded-xl text-xs font-bold';
+                document.getElementById('comp-chart-title').innerHTML = `<span>🌍 Mundo: Composición de la Pobreza Multidimensional</span><span class="text-xs font-bold px-2.5 py-1 bg-emerald-100 border border-slate-900 rounded-lg text-emerald-800">58% Infancia</span>`;
+                document.getElementById('comp-label-1').textContent = '🎒 Niños y Adolescentes (< 18 años)';
+                document.getElementById('comp-val-1').textContent = '58,0%';
+                document.getElementById('comp-bar-1').style.width = '58%';
+                document.getElementById('comp-label-2').textContent = '🧑🏾 Adultos (18 años o más)';
+                document.getElementById('comp-val-2').textContent = '42,0%';
+                document.getElementById('comp-bar-2').style.width = '42%';
+                document.getElementById('comp-insight').textContent = '💡 Dato clave: Del total de 1.100 millones de personas en pobreza multidimensional en el mundo, el 58% son niños y niñas.';
+            }
+        }
+
+        function updateComparatorSlider(val) {
+            document.getElementById('protection-val').textContent = `${val}%`;
+            const reduction = Math.round(val * 0.48);
+            document.getElementById('protection-feedback').textContent = `Con ${val}% de cobertura efectiva en asignaciones, salud y educación, se reduce hasta un ${reduction}% la vulnerabilidad infantil extrema.`;
+        }
+
+        /* -----------------------------------------------------------
+           5. SERIES DE JUANITO LAGUNA (EXPLORADOR ILUSTRADO)
+           ----------------------------------------------------------- */
+        const juanitoSeriesData = [
+            {
+                title: 'Juanito va a la ciudad (1963)',
+                desc: 'Juanito camina hacia la gran urbe cargando sus pertenencias entre cartones, chapas y publicidad descartada. Contrasta la inocencia del niño con la frialdad industrial de la metrópoli moderna.',
+                svg: `<svg viewBox="0 0 360 180" class="w-full h-full">
+                        <rect width="360" height="180" fill="#BAE6FD"/>
+                        <!-- Edificios de fondo -->
+                        <rect x="210" y="25" width="40" height="125" fill="#64748B" stroke="#1E293B" stroke-width="2"/>
+                        <rect x="260" y="10" width="48" height="140" fill="#475569" stroke="#1E293B" stroke-width="2"/>
+                        <rect x="315" y="40" width="35" height="110" fill="#94A3B8" stroke="#1E293B" stroke-width="2"/>
+                        <!-- Suelo collage -->
+                        <rect x="0" y="140" width="360" height="40" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                        <!-- Juanito caminando -->
+                        <circle cx="115" cy="82" r="14" fill="#FDBA74" stroke="#1E293B" stroke-width="2"/>
+                        <path d="M102 78 C102 64, 128 64, 128 78 Z" fill="#1E293B"/>
+                        <rect x="103" y="96" width="24" height="28" rx="6" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                        <line x1="110" y1="124" x2="105" y2="145" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
+                        <line x1="120" y1="124" x2="127" y2="145" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
+                        <!-- Atado de ropa -->
+                        <line x1="95" y1="105" x2="145" y2="75" stroke="#78350F" stroke-width="3"/>
+                        <circle cx="92" cy="112" r="11" fill="#38BDF8" stroke="#1E293B" stroke-width="2"/>
+                      </svg>`
+            },
+            {
+                title: 'Juanito aprende a leer (1961)',
+                desc: 'Rodeado de sus amigos del barrio y materiales humildes, Juanito abre un cuaderno como ventana hacia la libertad y el conocimiento, reafirmando su esperanza en el porvenir.',
+                svg: `<svg viewBox="0 0 360 180" class="w-full h-full">
+                        <rect width="360" height="180" fill="#FEF9C3"/>
+                        <circle cx="300" cy="40" r="24" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                        <rect x="0" y="135" width="360" height="45" fill="#34D399" stroke="#1E293B" stroke-width="2"/>
+                        <!-- Juanito leyendo -->
+                        <circle cx="150" cy="78" r="15" fill="#FDBA74" stroke="#1E293B" stroke-width="2"/>
+                        <path d="M136 74 C136 60, 164 60, 164 74 Z" fill="#1E293B"/>
+                        <rect x="136" y="93" width="28" height="32" rx="6" fill="#0284C7" stroke="#1E293B" stroke-width="2"/>
+                        <!-- Libro abierto brillante -->
+                        <polygon points="155,102 185,95 185,120 155,125" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+                        <polygon points="185,95 215,102 215,125 185,120" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+                        <text x="175" y="75" font-size="16" font-weight="900" fill="#F43F5E">A B C</text>
+                      </svg>`
+            },
+            {
+                title: 'Navidad de Juanito Laguna (1961)',
+                desc: 'En una mesa humilde iluminada por la calidez familiar, una lata reciclada se convierte en florero y una estrella de cartón corona la celebración, mostrando dignidad y ternura.',
+                svg: `<svg viewBox="0 0 360 180" class="w-full h-full">
+                        <rect width="360" height="180" fill="#1E1B4B"/>
+                        <!-- Estrella de cartón gigante -->
+                        <polygon points="180,15 190,42 218,42 195,58 204,85 180,68 156,85 165,58 142,42 170,42" fill="#FACC15" stroke="#FFFFFF" stroke-width="2"/>
+                        <!-- Mesa festiva collage -->
+                        <rect x="70" y="125" width="220" height="14" fill="#F43F5E" stroke="#FFFFFF" stroke-width="1.5"/>
+                        <rect x="90" y="139" width="12" height="41" fill="#D97706"/>
+                        <rect x="258" y="139" width="12" height="41" fill="#D97706"/>
+                        <!-- Lata con flores -->
+                        <rect x="168" y="102" width="24" height="23" fill="#94A3B8" stroke="#1E293B" stroke-width="1.5"/>
+                        <circle cx="175" cy="94" r="6" fill="#FB7185"/>
+                        <circle cx="186" cy="92" r="6" fill="#34D399"/>
+                      </svg>`
+            }
+        ];
+
+        function selectJuanitoSeries(index) {
+            soundEngine.playMarimba(523.25 + index * 65);
+            const item = juanitoSeriesData[index];
+            document.getElementById('series-artwork-box').innerHTML = item.svg;
+            document.getElementById('series-title').textContent = item.title;
+            document.getElementById('series-desc').textContent = item.desc;
+
+            [0, 1, 2].forEach(i => {
+                const btn = document.getElementById(`series-btn-${i}`);
+                if (i === index) {
+                    btn.className = 'neo-btn bg-yellow-300 text-slate-900 p-2 rounded-xl text-xs font-extrabold text-center';
+                } else {
+                    btn.className = 'neo-btn bg-white text-slate-900 p-2 rounded-xl text-xs font-bold text-center';
+                }
+            });
+        }
+
+        /* -----------------------------------------------------------
+           6. TALLER INTERACTIVO DE XILOCOLLAGE (DRAG & DROP + PNG)
+           ----------------------------------------------------------- */
+        const collageLayer = document.getElementById('collage-stickers-layer');
+        const collageSvg = document.getElementById('xilocollage-svg');
+        let selectedStickerEl = null;
+        let draggingSticker = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        const stickerTemplates = {
+            kite: `<g>
+                    <path d="M0 24 Q -10 42 -2 58" stroke="#1E293B" stroke-width="2" fill="none"/>
+                    <polygon points="0,-24 20,0 0,24 -20,0" fill="#FACC15" stroke="#1E293B" stroke-width="2.2"/>
+                    <polygon points="0,-24 20,0 0,0" fill="#F43F5E"/>
+                    <polygon points="0,0 -20,0 0,24" fill="#0284C7"/>
+                   </g>`,
+            tinmoon: `<g>
+                        <path d="M-8,-22 A24,24 0 1,0 18,16 A18,18 0 1,1 -8,-22 Z" fill="#CBD5E1" stroke="#1E293B" stroke-width="2.2"/>
+                        <line x1="-12" y1="-5" x2="2" y2="-5" stroke="#64748B" stroke-width="1.5"/>
+                        <line x1="-10" y1="4" x2="5" y2="4" stroke="#64748B" stroke-width="1.5"/>
+                      </g>`,
+            cardstar: `<g>
+                        <polygon points="0,-24 7,-7 25,-7 11,4 16,22 0,11 -16,22 -11,4 -25,-7 -7,-7" fill="#D97706" stroke="#1E293B" stroke-width="2.2"/>
+                        <polygon points="0,-14 4,-4 14,-4 6,2 9,12 0,6 -9,12 -6,2 -14,-4 -4,-4" fill="#FACC15"/>
+                       </g>`,
+            sun: `<g>
+                    <circle cx="0" cy="0" r="22" fill="#FACC15" stroke="#1E293B" stroke-width="2.2"/>
+                    <circle cx="0" cy="0" r="14" fill="#FB923C" stroke="#1E293B" stroke-width="1.5" stroke-dasharray="3 3"/>
+                  </g>`,
+            bird: `<g>
+                    <path d="M-20,4 Q-5,-16 14,-4 L24,-8 L16,4 Q2,18 -20,4 Z" fill="#38BDF8" stroke="#1E293B" stroke-width="2.2"/>
+                    <polygon points="-4,0 6,-12 10,2" fill="#FACC15" stroke="#1E293B" stroke-width="1.8"/>
+                    <circle cx="13" cy="-2" r="2" fill="#1E293B"/>
+                   </g>`,
+            flower: `<g>
+                        <circle cx="0" cy="-12" r="8" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                        <circle cx="12" cy="0" r="8" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                        <circle cx="0" cy="12" r="8" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                        <circle cx="-12" cy="0" r="8" fill="#F43F5E" stroke="#1E293B" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="8" fill="#FACC15" stroke="#1E293B" stroke-width="2"/>
+                     </g>`,
+            gear: `<g>
+                    <circle cx="0" cy="0" r="18" fill="#10B981" stroke="#1E293B" stroke-width="2.2"/>
+                    <circle cx="0" cy="0" r="7" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+                    <rect x="-3" y="-24" width="6" height="7" fill="#10B981" stroke="#1E293B" stroke-width="1.8"/>
+                    <rect x="-3" y="17" width="6" height="7" fill="#10B981" stroke="#1E293B" stroke-width="1.8"/>
+                    <rect x="-24" y="-3" width="7" height="6" fill="#10B981" stroke="#1E293B" stroke-width="1.8"/>
+                    <rect x="17" y="-3" width="7" height="6" fill="#10B981" stroke="#1E293B" stroke-width="1.8"/>
+                   </g>`,
+            cloud: `<g>
+                        <path d="M-24,10 H24 A11,11 0 0,0 24,-8 A14,14 0 0,0 -2,-10 A10,10 0 0,0 -24,10 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.2"/>
+                    </g>`
+        };
+
+        function addCollageSticker(type, customX = null, customY = null) {
+            soundEngine.playMarimba(659.25);
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const x = customX !== null ? customX : 220 + Math.random() * 280;
+            const y = customY !== null ? customY : 70 + Math.random() * 180;
+
+            g.dataset.x = x;
+            g.dataset.y = y;
+            g.dataset.scale = 1.15;
+            g.dataset.rot = 0;
+            g.style.cursor = 'grab';
+            g.innerHTML = stickerTemplates[type] || stickerTemplates.kite;
+
+            updateStickerTransform(g);
+
+            g.addEventListener('mousedown', startDragSticker);
+            g.addEventListener('touchstart', startDragSticker, { passive: false });
+
+            collageLayer.appendChild(g);
+            selectSticker(g);
+        }
+
+        function updateStickerTransform(el) {
+            const x = parseFloat(el.dataset.x);
+            const y = parseFloat(el.dataset.y);
+            const s = parseFloat(el.dataset.scale);
+            const r = parseFloat(el.dataset.rot);
+            el.setAttribute('transform', `translate(${x}, ${y}) scale(${s}) rotate(${r})`);
+        }
+
+        function selectSticker(el) {
+            if (selectedStickerEl) {
+                selectedStickerEl.style.filter = 'none';
+            }
+            selectedStickerEl = el;
+            if (selectedStickerEl) {
+                selectedStickerEl.style.filter = 'drop-shadow(0px 0px 6px rgba(244, 63, 94, 0.85))';
+            }
+        }
+
+        function getSvgPoint(clientX, clientY) {
+            const rect = collageSvg.getBoundingClientRect();
+            return {
+                x: ((clientX - rect.left) / rect.width) * 700,
+                y: ((clientY - rect.top) / rect.height) * 420
+            };
+        }
+
+        function startDragSticker(e) {
+            e.stopPropagation();
+            if (e.type === 'touchstart') e.preventDefault();
+            const target = e.currentTarget;
+            selectSticker(target);
+            draggingSticker = target;
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const pt = getSvgPoint(clientX, clientY);
+
+            dragOffset.x = pt.x - parseFloat(target.dataset.x);
+            dragOffset.y = pt.y - parseFloat(target.dataset.y);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (!draggingSticker) return;
+            const pt = getSvgPoint(e.clientX, e.clientY);
+            draggingSticker.dataset.x = Math.max(30, Math.min(670, pt.x - dragOffset.x));
+            draggingSticker.dataset.y = Math.max(30, Math.min(390, pt.y - dragOffset.y));
+            updateStickerTransform(draggingSticker);
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!draggingSticker || e.touches.length === 0) return;
+            const pt = getSvgPoint(e.touches[0].clientX, e.touches[0].clientY);
+            draggingSticker.dataset.x = Math.max(30, Math.min(670, pt.x - dragOffset.x));
+            draggingSticker.dataset.y = Math.max(30, Math.min(390, pt.y - dragOffset.y));
+            updateStickerTransform(draggingSticker);
+        }, { passive: true });
+
+        window.addEventListener('mouseup', () => { draggingSticker = null; });
+        window.addEventListener('touchend', () => { draggingSticker = null; });
+
+        function transformSelectedSticker(action) {
+            if (!selectedStickerEl) {
+                showToast('👆 Primero haz clic en una pieza del cuadro');
+                return;
+            }
+            soundEngine.playMarimba(587.33);
+            let s = parseFloat(selectedStickerEl.dataset.scale);
+            let r = parseFloat(selectedStickerEl.dataset.rot);
+            if (action === 'scaleUp') s = Math.min(2.5, s + 0.2);
+            if (action === 'scaleDown') s = Math.max(0.5, s - 0.2);
+            if (action === 'rotate') r = (r + 25) % 360;
+
+            selectedStickerEl.dataset.scale = s;
+            selectedStickerEl.dataset.rot = r;
+            updateStickerTransform(selectedStickerEl);
+        }
+
+        function deleteSelectedSticker() {
+            if (!selectedStickerEl) return;
+            soundEngine.playError();
+            selectedStickerEl.remove();
+            selectedStickerEl = null;
+        }
+
+        function setCollageBg(mode) {
+            soundEngine.playMarimba(523.25);
+            const rect = document.getElementById('collage-bg-rect');
+            if (mode === 'sky') rect.setAttribute('fill', '#BAE6FD');
+            if (mode === 'night') rect.setAttribute('fill', '#1E1B4B');
+            if (mode === 'sunset') rect.setAttribute('fill', '#FED7AA');
+        }
+
+        function resetCollageCanvas() {
+            soundEngine.playMarimba(440);
+            collageLayer.innerHTML = '';
+            selectedStickerEl = null;
+            // Piezas iniciales de ejemplo
+            addCollageSticker('sun', 110, 75);
+            addCollageSticker('kite', 460, 110);
+            addCollageSticker('bird', 290, 95);
+        }
+
+        function downloadCollagePNG() {
+            soundEngine.playSuccess();
+            const serializer = new XMLSerializer();
+            const svgStr = serializer.serializeToString(collageSvg);
+            const canvas = document.createElement('canvas');
+            canvas.width = 1400;
+            canvas.height = 840;
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+            const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(url);
+                const pngUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'mi-xilocollage-juanito-laguna.png';
+                link.href = pngUrl;
+                link.click();
+                showToast('🎨 ¡Tu obra Xilocollage se descargó en PNG!');
+            };
+            img.src = url;
+        }
+
+        /* -----------------------------------------------------------
+           7. TRIVIA INTERACTIVA RELÁMPAGO (8 PREGUNTAS)
+           ----------------------------------------------------------- */
+        let triviaQuestions = [
+            {
+                cat: 'Argentina • INDEC',
+                q: '¿Qué porcentaje de niños y niñas de 0 a 14 años viven bajo la línea de pobreza en Argentina según los últimos datos oficiales?',
+                options: ['Más del 44%', 'Alrededor del 15%', 'Exactamente el 22%', 'Menos del 10%'],
+                correct: 0,
+                exp: 'Más del 44% de los niños y niñas de 0 a 14 años viven en hogares bajo la línea de pobreza, el impacto generacional más alto.'
+            },
+            {
+                cat: 'Argentina • Canastas',
+                q: '¿Cuál es la diferencia entre la Canasta Básica Alimentaria (CBA) y la Canasta Básica Total (CBT)?',
+                options: [
+                    'Son exactamente iguales',
+                    'La CBA mide la indigencia (alimentos) y la CBT suma servicios/bienes para medir la pobreza',
+                    'La CBA solo se mide en zonas rurales',
+                    'La CBT mide únicamente el alquiler'
+                ],
+                correct: 1,
+                exp: 'La CBA define la línea de indigencia (requerimientos alimentarios mínimos) y la CBT suma transporte, salud, educación y vestimenta para definir la línea de pobreza.'
+            },
+            {
+                cat: 'El Mundo • PNUD',
+                q: '¿Cuántas personas en el mundo viven en situación de pobreza multidimensional según el PNUD y el Banco Mundial?',
+                options: ['250 millones', '1.100 millones', '3.500 millones', '90 millones'],
+                correct: 1,
+                exp: 'Aproximadamente 1.100 millones de personas en el planeta sufren pobreza multidimensional.'
+            },
+            {
+                cat: 'El Mundo • Infancia',
+                q: '¿Qué porcentaje de las personas en pobreza multidimensional a nivel global son niños menores de 18 años?',
+                options: ['20%', '35%', '58%', '85%'],
+                correct: 2,
+                exp: 'Cerca del 58% de las personas en pobreza multidimensional en el mundo son niños y adolescentes menores de 18 años.'
+            },
+            {
+                cat: 'El Mundo • Conflictos',
+                q: '¿Qué ocurre con las tasas de pobreza multidimensional en regiones afectadas por conflictos bélicos o inestabilidad?',
+                options: [
+                    'Son iguales al resto del mundo',
+                    'Triplican a las de otras regiones y concentran casi la mitad de los pobres',
+                    'Disminuyen por la ayuda externa',
+                    'No se pueden medir'
+                ],
+                correct: 1,
+                exp: 'Casi la mitad de las personas en pobreza multidimensional viven en contextos de conflicto o inestabilidad, donde las tasas triplican a las de otras regiones.'
+            },
+            {
+                cat: 'Arte • Antonio Berni',
+                q: '¿Quién creó al emblemático personaje de Juanito Laguna a fines de la década de 1950?',
+                options: ['Benito Quinquela Martín', 'Antonio Berni', 'Xul Solar', 'Molina Campos'],
+                correct: 1,
+                exp: 'Antonio Berni creó a Juanito Laguna como símbolo de los niños de las periferias urbanas y villas miseria argentinas.'
+            },
+            {
+                cat: 'Arte • Técnica',
+                q: '¿En qué consiste la técnica del "Xilocollage" utilizada por Berni en la serie de Juanito?',
+                options: [
+                    'Pintura digital sobre tela',
+                    'Grabado en madera combinado con desechos reales (latas, cartones, chapas, alambres)',
+                    'Escultura en mármol blanco',
+                    'Acuarela sobre seda'
+                ],
+                correct: 1,
+                exp: 'Berni combinó grabados en madera con materiales de desecho de los basurales para que el propio material reciclado transmitiera el mensaje social.'
+            },
+            {
+                cat: 'Filosofía de Berni',
+                q: 'Completa la célebre frase de Antonio Berni: «Juanito Laguna es un chico pobre, pero...»',
+                options: [
+                    '«...no tiene futuro.»',
+                    '«...no un pobre chico; es un ser lleno de vida y esperanzas.»',
+                    '«...prefiere vivir solo.»',
+                    '«...nunca juega en el barrio.»'
+                ],
+                correct: 1,
+                exp: 'Berni destacó la dignidad, alegría y esperanza de Juanito: «es un chico pobre, pero no un pobre chico».'
+            }
+        ];
+
+        let currentQIndex = 0;
+        let triviaScore = 0;
+        let triviaStreak = 0;
+        let triviaAnswered = false;
+
+        function renderTriviaQuestion() {
+            triviaAnswered = false;
+            const qObj = triviaQuestions[currentQIndex];
+            document.getElementById('trivia-q-number').textContent = `Pregunta ${currentQIndex + 1} de ${triviaQuestions.length}`;
+            document.getElementById('trivia-q-category').textContent = qObj.cat;
+            document.getElementById('trivia-question-text').textContent = qObj.q;
+            document.getElementById('trivia-progress-bar').style.width = `${((currentQIndex + 1) / triviaQuestions.length) * 100}%`;
+            document.getElementById('trivia-feedback-box').classList.add('hidden');
+
+            const grid = document.getElementById('trivia-options-grid');
+            grid.innerHTML = '';
+
+            qObj.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'neo-btn bg-white hover:bg-sky-50 text-slate-900 p-4 rounded-2xl text-left text-sm font-bold flex items-center gap-3';
+                btn.innerHTML = `<span class="w-7 h-7 rounded-lg bg-slate-100 border border-slate-900 flex items-center justify-center text-xs font-black shrink-0">${String.fromCharCode(65 + idx)}</span><span>${opt}</span>`;
+                btn.onclick = () => handleTriviaAnswer(idx, btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function handleTriviaAnswer(selectedIdx, btnEl) {
+            if (triviaAnswered) return;
+            triviaAnswered = true;
+
+            const qObj = triviaQuestions[currentQIndex];
+            const isCorrect = selectedIdx === qObj.correct;
+            const feedbackBox = document.getElementById('trivia-feedback-box');
+            const buttons = document.getElementById('trivia-options-grid').querySelectorAll('button');
+
+            buttons.forEach((b, i) => {
+                b.disabled = true;
+                if (i === qObj.correct) {
+                    b.classList.remove('bg-white');
+                    b.classList.add('bg-emerald-300');
+                } else if (i === selectedIdx && !isCorrect) {
+                    b.classList.remove('bg-white');
+                    b.classList.add('bg-rose-300');
+                }
+            });
+
+            feedbackBox.classList.remove('hidden', 'bg-emerald-100', 'bg-rose-100');
+
+            if (isCorrect) {
+                triviaScore++;
+                triviaStreak++;
+                soundEngine.playSuccess();
+                feedbackBox.classList.add('bg-emerald-100');
+                document.getElementById('trivia-feedback-icon').textContent = '🎉';
+                document.getElementById('trivia-feedback-title').textContent = '¡Excelente! Respuesta Correcta';
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 55, spread: 65, origin: { y: 0.75 } });
+                }
+            } else {
+                triviaStreak = 0;
+                soundEngine.playError();
+                feedbackBox.classList.add('bg-rose-100');
+                document.getElementById('trivia-feedback-icon').textContent = '💡';
+                document.getElementById('trivia-feedback-title').textContent = '¡Buen intento! Aprendamos el dato:';
+            }
+
+            document.getElementById('trivia-feedback-desc').textContent = qObj.exp;
+            document.getElementById('trivia-score').textContent = triviaScore;
+            document.getElementById('trivia-streak').textContent = triviaStreak;
+        }
+
+        function nextTriviaQuestion() {
+            soundEngine.playMarimba(523.25);
+            if (currentQIndex < triviaQuestions.length - 1) {
+                currentQIndex++;
+                renderTriviaQuestion();
+            } else {
+                showTriviaResults();
+            }
+        }
+
+        function showTriviaResults() {
+            document.getElementById('trivia-game-box').classList.add('hidden');
+            const resBox = document.getElementById('trivia-result-box');
+            resBox.classList.remove('hidden');
+
+            let medal = '🥉';
+            let title = '¡Explorador Curioso!';
+            if (triviaScore >= 7) {
+                medal = '🥇';
+                title = '¡Medalla de Oro! Experto en Arte y Realidad Social';
+                soundEngine.playSuccess();
+                if (typeof confetti === 'function') confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+            } else if (triviaScore >= 5) {
+                medal = '🥈';
+                title = '¡Medalla de Plata! Muy Buen Conocimiento';
+            }
+
+            document.getElementById('trivia-medal-emoji').textContent = medal;
+            document.getElementById('trivia-result-title').textContent = title;
+            document.getElementById('trivia-result-summary').textContent = `Obtuviste ${triviaScore} de ${triviaQuestions.length} respuestas correctas sobre la pobreza en Argentina, el panorama mundial y el legado de Juanito Laguna.`;
+        }
+
+        function restartTrivia() {
+            soundEngine.playMarimba(659.25);
+            currentQIndex = 0;
+            triviaScore = 0;
+            triviaStreak = 0;
+            document.getElementById('trivia-score').textContent = '0';
+            document.getElementById('trivia-streak').textContent = '0';
+            document.getElementById('trivia-result-box').classList.add('hidden');
+            document.getElementById('trivia-game-box').classList.remove('hidden');
+            renderTriviaQuestion();
+        }
+
+        /* -----------------------------------------------------------
+           8. MODO ESTUDIO / EDITOR TOTAL + MODO PRESENTACIÓN + LOCALSTORAGE
+           ----------------------------------------------------------- */
+        const STORAGE_KEY = 'juanito_pop_studio_v1';
+        let inlineEditEnabled = false;
+        let customCardsList = [];
+
+        function toggleStudioDrawer() {
+            soundEngine.playMarimba(587.33);
+            const drawer = document.getElementById('studio-drawer');
+            drawer.classList.toggle('translate-x-full');
+            populateTriviaEditorSelect();
+        }
+
+        function toggleInlineEdit() {
+            inlineEditEnabled = !inlineEditEnabled;
+            soundEngine.playMarimba(659.25);
+            const btn = document.getElementById('inline-edit-toggle');
+            const editables = document.querySelectorAll('[data-editable]');
+
+            if (inlineEditEnabled) {
+                document.body.classList.add('edit-active');
+                editables.forEach(el => el.setAttribute('contenteditable', 'true'));
+                btn.textContent = 'Edición Activa (Listo)';
+                btn.classList.replace('bg-violet-500', 'bg-emerald-500');
+                showToast('✍️ Haz clic en cualquier texto para editarlo directamente');
+            } else {
+                document.body.classList.remove('edit-active');
+                editables.forEach(el => el.setAttribute('contenteditable', 'false'));
+                btn.textContent = 'Activar Clic para Editar';
+                btn.classList.replace('bg-emerald-500', 'bg-violet-500');
+                saveAllState(true);
+            }
+        }
+
+        // Guardar automáticamente cuando se edita inline
+        document.addEventListener('input', (e) => {
+            if (e.target && e.target.hasAttribute('data-editable')) {
+                saveAllState(false);
+            }
+        });
+
+        function togglePresentationMode(enable) {
+            soundEngine.playMarimba(523.25);
+            const exitPill = document.getElementById('presentation-exit-pill');
+            if (enable) {
+                if (inlineEditEnabled) toggleInlineEdit();
+                document.getElementById('studio-drawer').classList.add('translate-x-full');
+                document.body.classList.add('presentation-mode');
+                exitPill.classList.remove('hidden');
+                showToast('🖥️ Modo Presentación activado (controles ocultos)');
+            } else {
+                document.body.classList.remove('presentation-mode');
+                exitPill.classList.add('hidden');
+                showToast('🛠️ Controles restaurados');
+            }
+        }
+
+        const gallerySvgIcons = {
+            kite: `<svg viewBox="0 0 80 80" class="w-16 h-16"><polygon points="40,6 70,36 40,66 10,36" fill="#FACC15" stroke="#1E293B" stroke-width="3"/><polygon points="40,6 70,36 40,36" fill="#F43F5E"/><polygon points="40,36 10,36 40,66" fill="#0284C7"/></svg>`,
+            sun: `<svg viewBox="0 0 80 80" class="w-16 h-16"><circle cx="40" cy="40" r="24" fill="#FACC15" stroke="#1E293B" stroke-width="3"/><circle cx="40" cy="40" r="14" fill="#FB923C"/></svg>`,
+            globe: `<svg viewBox="0 0 80 80" class="w-16 h-16"><circle cx="40" cy="40" r="28" fill="#38BDF8" stroke="#1E293B" stroke-width="3"/><path d="M25 32 Q40 20 52 36 T35 55 Z" fill="#34D399" stroke="#1E293B" stroke-width="2"/></svg>`,
+            heart: `<svg viewBox="0 0 80 80" class="w-16 h-16"><path d="M40 66 C15 48 12 24 28 18 C36 15 40 24 40 24 C40 24 44 15 52 18 C68 24 65 48 40 66 Z" fill="#F43F5E" stroke="#1E293B" stroke-width="3"/></svg>`,
+            book: `<svg viewBox="0 0 80 80" class="w-16 h-16"><rect x="14" y="20" width="26" height="42" rx="3" fill="#FEF08A" stroke="#1E293B" stroke-width="3"/><rect x="40" y="20" width="26" height="42" rx="3" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/></svg>`,
+            factory: `<svg viewBox="0 0 80 80" class="w-16 h-16"><polygon points="12,64 12,34 32,46 32,34 52,46 52,20 68,20 68,64" fill="#94A3B8" stroke="#1E293B" stroke-width="3"/></svg>`
+        };
+
+        function addCustomCard() {
+            const title = document.getElementById('new-card-title').value.trim();
+            const text = document.getElementById('new-card-text').value.trim();
+            const color = document.getElementById('new-card-color').value;
+            const svgKey = document.getElementById('new-card-svg').value;
+            const fileInput = document.getElementById('new-card-file');
+
+            if (!title || !text) {
+                showToast('⚠️ Escribe un título y un texto para tu tarjeta');
+                return;
+            }
+
+            let imageUrl = '';
+            if (fileInput.files && fileInput.files[0]) {
+                imageUrl = URL.createObjectURL(fileInput.files[0]);
+            }
+
+            const cardObj = {
+                id: 'custom_' + Date.now(),
+                title,
+                text,
+                color,
+                svgKey,
+                imageUrl
+            };
+
+            customCardsList.push(cardObj);
+            renderCustomCards();
+            saveAllState(true);
+
+            document.getElementById('new-card-title').value = '';
+            document.getElementById('new-card-text').value = '';
+            fileInput.value = '';
+            soundEngine.playSuccess();
+            showToast('✨ ¡Nueva tarjeta agregada con éxito!');
+        }
+
+        function renderCustomCards() {
+            const section = document.getElementById('custom-cards-section');
+            const grid = document.getElementById('custom-cards-grid');
+
+            if (customCardsList.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            grid.innerHTML = '';
+
+            customCardsList.forEach(card => {
+                const div = document.createElement('div');
+                div.className = `neo-card neo-card-${card.color} rounded-2xl p-5 bg-white flex flex-col justify-between relative`;
+                const visualHtml = card.imageUrl
+                    ? `<img src="${card.imageUrl}" alt="${card.title}" class="w-full h-36 object-cover rounded-xl border-2 border-slate-900 mb-3">`
+                    : `<div class="w-full h-24 rounded-xl bg-amber-50 border-2 border-slate-900 flex items-center justify-center mb-3">${gallerySvgIcons[card.svgKey] || gallerySvgIcons.kite}</div>`;
+
+                div.innerHTML = `
+                    <div>
+                        <button onclick="removeCustomCard('${card.id}')" class="editor-ui no-print absolute top-3 right-3 w-7 h-7 rounded-lg bg-rose-100 border border-slate-900 text-rose-700 text-xs font-black" title="Eliminar tarjeta">✕</button>
+                        ${visualHtml}
+                        <h4 class="text-lg font-black text-slate-900 mb-1.5" contenteditable="${inlineEditEnabled}">${card.title}</h4>
+                        <p class="text-sm text-slate-700 leading-relaxed" contenteditable="${inlineEditEnabled}">${card.text}</p>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function removeCustomCard(id) {
+            customCardsList = customCardsList.filter(c => c.id !== id);
+            renderCustomCards();
+            saveAllState(false);
+            showToast('🗑️ Tarjeta eliminada');
+        }
+
+        // Editor de Trivia
+        function populateTriviaEditorSelect() {
+            const sel = document.getElementById('edit-trivia-select');
+            sel.innerHTML = '';
+            triviaQuestions.forEach((item, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `P${idx + 1}: ${item.q.substring(0, 38)}...`;
+                sel.appendChild(opt);
+            });
+            loadTriviaQuestionToEditor();
+        }
+
+        function loadTriviaQuestionToEditor() {
+            const idx = parseInt(document.getElementById('edit-trivia-select').value || '0', 10);
+            const item = triviaQuestions[idx];
+            if (!item) return;
+            document.getElementById('edit-trivia-q').value = item.q;
+            document.getElementById('edit-trivia-exp').value = item.exp;
+        }
+
+        function saveEditedTriviaQuestion() {
+            const idx = parseInt(document.getElementById('edit-trivia-select').value || '0', 10);
+            const newQ = document.getElementById('edit-trivia-q').value.trim();
+            const newExp = document.getElementById('edit-trivia-exp').value.trim();
+            if (newQ) triviaQuestions[idx].q = newQ;
+            if (newExp) triviaQuestions[idx].exp = newExp;
+            renderTriviaQuestion();
+            saveAllState(true);
+            showToast('✅ Pregunta de trivia actualizada');
+        }
+
+        // Persistencia en localStorage
+        function saveAllState(notify = false) {
+            try {
+                const editableData = {};
+                document.querySelectorAll('[data-editable]').forEach(el => {
+                    editableData[el.dataset.editable] = el.innerHTML;
+                });
+
+                const state = {
+                    editableData,
+                    triviaQuestions,
+                    customCardsList: customCardsList.map(c => ({ ...c, imageUrl: '' }))
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                if (notify) showToast('💾 Cambios guardados correctamente');
+            } catch (e) {
+                console.warn('No se pudo guardar en localStorage:', e);
+            }
+        }
+
+        function loadSavedState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const state = JSON.parse(raw);
+
+                if (state.editableData) {
+                    Object.keys(state.editableData).forEach(key => {
+                        const el = document.querySelector(`[data-editable="${key}"]`);
+                        if (el) el.innerHTML = state.editableData[key];
+                    });
+                }
+                if (Array.isArray(state.triviaQuestions) && state.triviaQuestions.length > 0) {
+                    triviaQuestions = state.triviaQuestions;
+                }
+                if (Array.isArray(state.customCardsList)) {
+                    customCardsList = state.customCardsList;
+                    renderCustomCards();
+                }
+            } catch (e) {
+                console.warn('Error cargando estado guardado:', e);
+            }
+        }
+
+        let resetPending = false;
+        function handleResetRequest() {
+            const btn = document.getElementById('reset-confirm-btn');
+            if (!resetPending) {
+                resetPending = true;
+                btn.textContent = '¿Seguro? Clic para confirmar';
+                btn.classList.replace('bg-white', 'bg-rose-500');
+                btn.classList.replace('text-rose-600', 'text-white');
+                setTimeout(() => {
+                    resetPending = false;
+                    btn.textContent = 'Restaurar Original';
+                    btn.classList.replace('bg-rose-500', 'bg-white');
+                    btn.classList.replace('text-white', 'text-rose-600');
+                }, 4000);
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        /* -----------------------------------------------------------
+           9. EXPORTAR A PDF / IMPRIMIR & NOTIFICACIONES TOAST
+           ----------------------------------------------------------- */
+        function exportPDF() {
+            soundEngine.playSuccess();
+            // Mostrar tanto Argentina como el Mundo antes de imprimir
+            switchDataTab('all');
+            showToast('📄 Preparando diseño editorial para guardar como PDF...');
+            setTimeout(() => {
+                window.print();
+            }, 350);
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-900 text-white border-2 border-yellow-300 px-4 py-2.5 rounded-2xl text-xs font-extrabold shadow-[4px_4px_0px_#FACC15] transition-all duration-300';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        /* -----------------------------------------------------------
+           INICIALIZACIÓN AL CARGAR LA PÁGINA
+           ----------------------------------------------------------- */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedState();
+            selectJuanitoSeries(0);
+            resetCollageCanvas();
+            renderTriviaQuestion();
+        });
+    </script>
+</body>
+</html>
